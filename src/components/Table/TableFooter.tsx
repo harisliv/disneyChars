@@ -7,7 +7,6 @@ export function TableFooter({ table }: TTableProps) {
   const { setPagination } = usePagination();
   const { pageSize, pageIndex } = table.getState().pagination;
   const { totalCount, isFetching } = usePaginatedCharacters();
-  console.log('🚀 ~ TableFooter ~ pageIndex:', pageIndex);
   return (
     <Box
       sx={{
