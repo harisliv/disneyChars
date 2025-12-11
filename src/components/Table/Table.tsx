@@ -2,7 +2,7 @@ import { useState } from 'react';
 import {
   useReactTable,
   getCoreRowModel,
-  type VisibilityState
+  getSortedRowModel,
 } from '@tanstack/react-table';
 import { StyledTable, StyledTableContainer } from './Table.styles';
 import { useTableColumns } from './useTableColumns';
@@ -58,6 +58,7 @@ export default function DisneyCharacterTable() {
     manualPagination: true,
     onPaginationChange: setPagination,
     onColumnVisibilityChange: setColumnVisibility,
+    getSortedRowModel: getSortedRowModel(),
     state: {
       pagination,
       columnVisibility
