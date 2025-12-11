@@ -1,12 +1,12 @@
 import { Box, TablePagination, TablePaginationActions } from '@mui/material';
 import { ColumnVisibilityMenu } from './ColumnVisibilityMenu';
-import { usePaginatedTableData, usePagination } from '@/hooks';
+import { usePaginatedCharacters, usePagination } from '@/hooks';
 import type { TTableProps } from '@/types';
 
 export function TableFooter({ table }: TTableProps) {
   const { setPagination } = usePagination();
   const { pageSize, pageIndex } = table.getState().pagination;
-  const { totalCount, isFetching } = usePaginatedTableData();
+  const { totalCount, isFetching } = usePaginatedCharacters();
   console.log('🚀 ~ TableFooter ~ pageIndex:', pageIndex);
   return (
     <Box

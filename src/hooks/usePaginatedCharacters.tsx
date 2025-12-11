@@ -4,16 +4,18 @@ import type { PaginationState } from '@tanstack/react-table';
 import axios from 'axios';
 import { usePagination } from './usePagination';
 
-const DISNEY_API_URL = 'https://api.disneyapi.dev/character';
-
-const getDisneyCharacters = async (pagination: PaginationState) =>
+const getDisneyCharacters = async (
+  pagination: PaginationState,
+  signal: AbortSignal
+) =>
   await axios
     .get(
-      `${DISNEY_API_URL}?page=${pagination.pageIndex + 1}&pageSize=${pagination.pageSize}`
+      `${import.meta.env.VITE_DISNEY_API_BASE_URL}?page=${pagination.pageIndex + 1}&pageSize=${pagination.pageSize}`,
+      { signal }
     )
     .then((response) => response.data);
 
-export function usePaginatedTableData() {
+export function usePaginatedCharacters() {
   const { pagination } = usePagination();
   const query = useQuery<{
     data: TDisneyCharacter[];
@@ -21,7 +23,7 @@ export function usePaginatedTableData() {
   }>({
     queryKey: ['disneyCharacters', pagination],
     placeholderData: keepPreviousData,
-    queryFn: () => getDisneyCharacters(pagination)
+    queryFn: ({ signal }) => getDisneyCharacters(pagination, signal)
   });
   const characters = query.data?.data ?? [];
 

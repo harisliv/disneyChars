@@ -5,12 +5,19 @@ import { PaginationProvider } from './context';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import CircularProgress from '@mui/material/CircularProgress';
-import { usePaginatedTableData } from './hooks/usePaginatedTableData';
+import { usePaginatedCharacters } from './hooks/usePaginatedCharacters';
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 1000 * 60 * 5, // 5 minutes,
+      refetchOnWindowFocus: false
+    }
+  }
+});
 
 function AppContent() {
-  const { isLoading } = usePaginatedTableData();
+  const { isLoading } = usePaginatedCharacters();
 
   if (isLoading) {
     return (

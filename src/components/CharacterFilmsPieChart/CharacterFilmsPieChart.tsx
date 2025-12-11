@@ -1,8 +1,11 @@
-import { usePaginatedTableData } from '@/hooks/usePaginatedTableData';
+import { usePaginatedCharacters } from '@/hooks';
 import { Chart, Series, Tooltip } from '@highcharts/react';
 import type Highcharts from 'highcharts';
 import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import { CardContainer, CardHeader } from '@/components/Card';
+import { exportPieChartToExcel } from '@/utils/exportPie';
 
 interface IPiePointWithFilms extends Highcharts.Point {
   films?: string[];
@@ -10,10 +13,28 @@ interface IPiePointWithFilms extends Highcharts.Point {
 }
 
 export default function CharacterFilmsPieChart() {
-  const { pieChartData } = usePaginatedTableData();
+  const { pieChartData } = usePaginatedCharacters();
+
+  const handleExport = () => {
+    exportPieChartToExcel(pieChartData);
+  };
+
   return (
     <CardContainer>
-      <CardHeader title="Films Distribution" />
+      <CardHeader
+        title="Films Distribution"
+        actions={
+          <Button
+            variant="outlined"
+            size="small"
+            startIcon={<FileDownloadIcon />}
+            onClick={handleExport}
+            disabled={pieChartData.length === 0}
+          >
+            Export to Excel
+          </Button>
+        }
+      />
       <Box
         sx={{
           flex: 1,
@@ -23,7 +44,19 @@ export default function CharacterFilmsPieChart() {
           p: 2
         }}
       >
-        <Chart>
+        <Chart
+          options={{
+            chart: {
+              height: '100%'
+            }
+          }}
+          containerProps={{
+            style: {
+              height: '100%',
+              width: '100%'
+            }
+          }}
+        >
           <Tooltip
             useHTML
             formatter={function (this: IPiePointWithFilms) {

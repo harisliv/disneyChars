@@ -11,8 +11,10 @@ import { TableFooter } from './TableFooter';
 import TableHeader from './TableHeader';
 import TableBodyComponent from './TableBody';
 import { CharacterDetailsModal } from '@/components/CharacterDetailsModal';
+import { CharacterSearch } from '@/components/CharacterSearch';
 import { usePagination } from '@/hooks';
-import { usePaginatedTableData } from '@/hooks';
+import { usePaginatedCharacters } from '@/hooks';
+import type { TDisneyCharacter } from '@/types';
 
 const initialColumnVisibility: VisibilityState = {
   allies: false,
@@ -34,9 +36,15 @@ export default function DisneyCharacterTable() {
     setIsModalOpen(false);
   };
 
+  const handleCharacterSelect = (character: TDisneyCharacter | null) => {
+    if (character) {
+      handleViewDetails(character._id);
+    }
+  };
+
   const columns = useTableColumns({ onViewDetails: handleViewDetails });
   const { pagination, setPagination } = usePagination();
-  const { data: queryData, totalCount } = usePaginatedTableData();
+  const { data: queryData, totalCount } = usePaginatedCharacters();
 
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>(
     initialColumnVisibility
@@ -60,7 +68,12 @@ export default function DisneyCharacterTable() {
   return (
     <>
       <CardContainer>
-        <CardHeader title="Disney Characters" />
+        <CardHeader
+          title="Disney Characters"
+          actions={
+            <CharacterSearch onCharacterSelect={handleCharacterSelect} />
+          }
+        />
         <StyledTableContainer>
           <StyledTable stickyHeader>
             <TableHeader table={table} />

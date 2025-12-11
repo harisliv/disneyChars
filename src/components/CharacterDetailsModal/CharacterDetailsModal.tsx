@@ -16,7 +16,7 @@ import {
   Fade
 } from '@mui/material';
 import { useState } from 'react';
-import { useCharacter } from '@/hooks/useCharacter';
+import { useSingleCharacter } from '@/hooks';
 
 interface ICharacterDetailsModalProps {
   open: boolean;
@@ -64,7 +64,11 @@ export function CharacterDetailsModal({
   onClose,
   characterId
 }: ICharacterDetailsModalProps) {
-  const { data: character, isLoading, error } = useCharacter(characterId || '');
+  const {
+    data: character,
+    isLoading,
+    error
+  } = useSingleCharacter(characterId || '');
 
   return (
     <Dialog
@@ -130,7 +134,6 @@ export function CharacterDetailsModal({
                 )}
               </Grid>
 
-              {/* Details Section */}
               <Grid size={{ xs: 12, md: 7 }}>
                 {/* TV Shows */}
                 <Box sx={{ mb: 3 }}>

@@ -2,14 +2,12 @@ import { useQuery } from '@tanstack/react-query';
 import type { TDisneyCharacter } from '@/types';
 import axios from 'axios';
 
-const DISNEY_API_URL = 'https://api.disneyapi.dev/character';
-
 const getCharacter = async (id: string) =>
   await axios
-    .get(`${DISNEY_API_URL}/${id}`)
+    .get(`${import.meta.env.VITE_DISNEY_API_BASE_URL}/${id}`)
     .then((response) => response.data.data);
 
-export function useCharacter(id: string) {
+export function useSingleCharacter(id: string) {
   return useQuery<TDisneyCharacter>({
     queryKey: ['character', id],
     queryFn: () => getCharacter(id),
