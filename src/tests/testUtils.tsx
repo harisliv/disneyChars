@@ -44,6 +44,12 @@ type TCharacterHandlerOptions = {
   totalPages?: number;
   nextPage?: string | null;
   delayMs?: number;
+  pages?: Array<{
+    page: number;
+    data: TDisneyCharacter[];
+    nextPage?: string | null;
+    delayMs?: number;
+  }>;
   apiBaseUrl?: string;
 };
 
@@ -53,74 +59,49 @@ export function mockCharactersResponse(options: TCharacterHandlerOptions = {}) {
     totalPages = 1,
     nextPage = null,
     delayMs = 0,
+    pages,
     apiBaseUrl = import.meta.env.VITE_DISNEY_API_BASE_URL ||
       'https://api.disneyapi.dev/character'
   } = options;
 
-  const handler = delayMs
-    ? http.get(apiBaseUrl, async () => {
-        await new Promise((resolve) => setTimeout(resolve, delayMs));
-        return HttpResponse.json<TApiResponse>({
-          data,
-          info: { totalPages, nextPage }
-        });
-      })
-    : http.get(apiBaseUrl, () =>
-        HttpResponse.json<TApiResponse>({
-          data,
-          info: { totalPages, nextPage }
-        })
-      );
+  if (pages) {
+    const handler = http.get(apiBaseUrl, async ({ request }) => {
+      const url = new URL(request.url);
+      const pageParam = url.searchParams.get('page');
+      const page = pageParam ? parseInt(pageParam, 10) : 1;
 
-  server.use(handler);
-}
+      const pageData = pages.find((p) => p.page === page) || pages[0];
 
-type TPaginatedHandlerOptions = {
-  pages?: Array<{
-    page: number;
-    data: TDisneyCharacter[];
-    nextPage?: string | null;
-    delayMs?: number;
-  }>;
-  totalPages?: number;
-  apiBaseUrl?: string;
-};
-
-export function mockPaginatedCharactersResponse(
-  options: TPaginatedHandlerOptions = {}
-) {
-  const {
-    pages = [
-      {
-        page: 1,
-        data: defaultMockCharacters,
-        nextPage: null
+      if (pageData.delayMs) {
+        await new Promise((resolve) => setTimeout(resolve, pageData.delayMs));
       }
-    ],
-    totalPages = 1,
-    apiBaseUrl = import.meta.env.VITE_DISNEY_API_BASE_URL ||
-      'https://api.disneyapi.dev/character'
-  } = options;
 
-  const handler = http.get(apiBaseUrl, async ({ request }) => {
-    const url = new URL(request.url);
-    const pageParam = url.searchParams.get('page');
-    const page = pageParam ? parseInt(pageParam, 10) : 1;
-
-    const pageData = pages.find((p) => p.page === page) || pages[0];
-
-    if (pageData.delayMs) {
-      await new Promise((resolve) => setTimeout(resolve, pageData.delayMs));
-    }
-
-    return HttpResponse.json<TApiResponse>({
-      data: pageData.data,
-      info: {
-        totalPages,
-        nextPage: pageData.nextPage ?? null
-      }
+      return HttpResponse.json<TApiResponse>({
+        data: pageData.data,
+        info: {
+          totalPages: totalPages || pages.length,
+          nextPage: pageData.nextPage ?? null
+        }
+      });
     });
-  });
 
-  server.use(handler);
+    server.use(handler);
+  } else {
+    const handler = delayMs
+      ? http.get(apiBaseUrl, async () => {
+          await new Promise((resolve) => setTimeout(resolve, delayMs));
+          return HttpResponse.json<TApiResponse>({
+            data,
+            info: { totalPages, nextPage }
+          });
+        })
+      : http.get(apiBaseUrl, () =>
+          HttpResponse.json<TApiResponse>({
+            data,
+            info: { totalPages, nextPage }
+          })
+        );
+
+    server.use(handler);
+  }
 }

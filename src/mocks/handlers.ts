@@ -38,5 +38,22 @@ export const handlers = [
         nextPage: null
       }
     });
-  })
+  }),
+  http.get(`${apiBaseUrl}/:id`, () =>
+    HttpResponse.json<{ data: TDisneyCharacter }>({
+      data: {
+        _id: 1,
+        name: 'Mickey Mouse',
+        sourceUrl: 'https://example.com/mickey',
+        films: ['Film 1'],
+        shortFilms: [],
+        tvShows: ['Show 1'],
+        videoGames: [],
+        alignment: 'good',
+        parkAttractions: [],
+        allies: [],
+        enemies: []
+      }
+    })
+  )
 ];

@@ -4,11 +4,7 @@ import userEvent from '@testing-library/user-event';
 import { CharacterSearch } from '../components/CharacterSearch/CharacterSearch';
 import type { TDisneyCharacter } from '../types';
 import { TestQueryClientProvider } from './TestQueryClientProvider';
-import {
-  mockCharactersResponse,
-  mockPaginatedCharactersResponse,
-  defaultMockCharacters
-} from './testUtils';
+import { mockCharactersResponse, defaultMockCharacters } from './testUtils';
 
 describe('CharacterSearch', () => {
   const mockOnCharacterSelect = vi.fn();
@@ -212,7 +208,7 @@ describe('CharacterSearch', () => {
       import.meta.env.VITE_DISNEY_API_BASE_URL ||
       'https://api.disneyapi.dev/character';
 
-    mockPaginatedCharactersResponse({
+    mockCharactersResponse({
       pages: [
         {
           page: 1,
@@ -273,7 +269,7 @@ describe('CharacterSearch', () => {
       import.meta.env.VITE_DISNEY_API_BASE_URL ||
       'https://api.disneyapi.dev/character';
 
-    mockPaginatedCharactersResponse({
+    mockCharactersResponse({
       pages: [
         {
           page: 1,
@@ -343,7 +339,7 @@ describe('CharacterSearch', () => {
       import.meta.env.VITE_DISNEY_API_BASE_URL ||
       'https://api.disneyapi.dev/character';
 
-    mockPaginatedCharactersResponse({
+    mockCharactersResponse({
       pages: [
         {
           page: 1,

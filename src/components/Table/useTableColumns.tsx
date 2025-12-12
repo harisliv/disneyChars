@@ -46,6 +46,7 @@ export function useTableColumns({ onViewDetails }: IUseTableColumnsProps = {}) {
             color="primary"
             size="small"
             onClick={() => onViewDetails?.(info.row.original._id)}
+            data-testid={`view-details-button-${info.row.original._id}`}
           >
             <InfoOutlinedIcon fontSize="small" />
           </IconButton>

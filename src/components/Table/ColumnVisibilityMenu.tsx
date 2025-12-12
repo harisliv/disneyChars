@@ -28,6 +28,7 @@ export function ColumnVisibilityMenu({ table }: TTableProps) {
       <IconButton
         onClick={handleClick}
         size="small"
+        data-testid="column-visibility-button"
         sx={{
           border: '1px solid',
           borderColor: 'divider',

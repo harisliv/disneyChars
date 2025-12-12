@@ -11,6 +11,15 @@ export default defineConfig(({ mode }) => {
       alias: {
         '@': '/src'
       }
+    },
+    build: {
+      rollupOptions: {
+        output: {
+          manualChunks: {
+            xlsx: ['xlsx']
+          }
+        }
+      }
     }
   };
 });

@@ -1,1 +1,1 @@
-export { default } from './Table';
+export { default as DisneyCharacterTable } from './Table';

@@ -15,17 +15,21 @@ export function exportPieChartToExcel(
     'Number of Films': item.y,
     Films: item.films.join(', ')
   }));
+  try {
+    const worksheet = XLSX.utils.json_to_sheet(excelData);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Films Distribution');
 
-  const worksheet = XLSX.utils.json_to_sheet(excelData);
-  const workbook = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(workbook, worksheet, 'Films Distribution');
+    const colWidths = [
+      { wch: 20 }, // Character Name
+      { wch: 15 }, // Number of Films
+      { wch: 50 } // Films
+    ];
+    worksheet['!cols'] = colWidths;
 
-  const colWidths = [
-    { wch: 20 }, // Character Name
-    { wch: 15 }, // Number of Films
-    { wch: 50 } // Films
-  ];
-  worksheet['!cols'] = colWidths;
-
-  XLSX.writeFile(workbook, filename);
+    XLSX.writeFile(workbook, filename);
+  } catch (error) {
+    console.error(error);
+    throw new Error(String(error));
+  }
 }

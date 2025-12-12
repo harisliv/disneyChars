@@ -12,6 +12,7 @@ export default function TableHeader({ table }: TTableProps) {
           {headerGroup.headers.map((header) => (
             <TableCell key={header.id} colSpan={header.colSpan}>
               <div
+                data-testid={`table-header-${header.id}`}
                 style={{ display: 'flex', alignItems: 'center', gap: '8px' }}
                 {...{
                   className: header.column.getCanSort()
