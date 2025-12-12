@@ -1,23 +1,31 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { DisneyCharacterTable } from './components';
+import {
+  DisneyCharacterTable,
+  ErrorBoundary,
+  EmptyResults
+} from './components';
 import CharacterFilmsPieChart from './components/CharacterFilmsPieChart/CharacterFilmsPieChart';
 import { PaginationProvider } from './context';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import CircularProgress from '@mui/material/CircularProgress';
 import { usePaginatedCharacters } from './hooks/usePaginatedCharacters';
+import { usePagination } from '@/hooks';
 
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       staleTime: 1000 * 60 * 5, // 5 minutes,
-      refetchOnWindowFocus: false
+      refetchOnWindowFocus: false,
+      throwOnError: true,
+      retry: 3
     }
   }
 });
 
 function AppContent() {
-  const { isLoading } = usePaginatedCharacters();
+  const { pagination } = usePagination();
+  const { isLoading, data } = usePaginatedCharacters({ pagination });
 
   if (isLoading) {
     return (
@@ -32,6 +40,10 @@ function AppContent() {
         <CircularProgress size={60} />
       </Box>
     );
+  }
+
+  if (!data || data.length === 0) {
+    return <EmptyResults />;
   }
 
   return (
@@ -61,10 +73,12 @@ function AppContent() {
 
 export default function App() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <PaginationProvider>
-        <AppContent />
-      </PaginationProvider>
-    </QueryClientProvider>
+    <ErrorBoundary>
+      <QueryClientProvider client={queryClient}>
+        <PaginationProvider>
+          <AppContent />
+        </PaginationProvider>
+      </QueryClientProvider>
+    </ErrorBoundary>
   );
 }

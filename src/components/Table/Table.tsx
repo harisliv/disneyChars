@@ -3,6 +3,7 @@ import {
   useReactTable,
   getCoreRowModel,
   getSortedRowModel,
+  type VisibilityState
 } from '@tanstack/react-table';
 import { StyledTable, StyledTableContainer } from './Table.styles';
 import { useTableColumns } from './useTableColumns';

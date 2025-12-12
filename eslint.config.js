@@ -6,6 +6,8 @@ import react from 'eslint-plugin-react';
 import tseslint from 'typescript-eslint';
 import { defineConfig, globalIgnores } from 'eslint/config';
 import { reactRules, typescriptRules, baseRules } from './config/index.js';
+import vitest from 'eslint-plugin-vitest';
+import testingLibrary from 'eslint-plugin-testing-library';
 
 export default defineConfig([
   globalIgnores(['dist']),
@@ -33,6 +35,22 @@ export default defineConfig([
       ...baseRules,
       ...typescriptRules,
       ...reactRules
+    }
+  },
+  {
+    files: ['**/*.{test,spec}.{ts,tsx}', '**/tests/**/*.{ts,tsx}'],
+    plugins: {
+      vitest,
+      'testing-library': testingLibrary
+    },
+    languageOptions: {
+      globals: {
+        ...globals.node
+      }
+    },
+    rules: {
+      ...(vitest.configs.recommended?.rules || {}),
+      ...(testingLibrary.configs.react?.rules || {})
     }
   }
 ]);
