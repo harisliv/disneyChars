@@ -85,7 +85,7 @@ export function CharacterSearch({ onCharacterSelect }: ICharacterSearchProps) {
     hasNextPage,
     fetchNextPage,
     isFetchingNextPage
-  } = useSearchCharacters(searchParam, 50);
+  } = useSearchCharacters(searchParam);
 
   const showHasMore = characters.length > 0;
 
