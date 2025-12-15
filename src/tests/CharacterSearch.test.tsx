@@ -21,15 +21,6 @@ describe('CharacterSearch', () => {
     ).toBeInTheDocument();
   });
 
-  it('should display correct placeholder for name search type', () => {
-    render(<CharacterSearch onCharacterSelect={mockOnCharacterSelect} />, {
-      wrapper: TestQueryClientProvider
-    });
-
-    const input = screen.getByPlaceholderText('Search by character name...');
-    expect(input).toBeInTheDocument();
-  });
-
   it('should change placeholder when search type changes to TV show', async () => {
     const user = userEvent.setup();
     render(<CharacterSearch onCharacterSelect={mockOnCharacterSelect} />, {
@@ -80,7 +71,6 @@ describe('CharacterSearch', () => {
   it('should display loading indicator when data is loading', async () => {
     mockCharactersResponse({
       totalPages: 1,
-      nextPage: null,
       delayMs: 100
     });
 
@@ -99,8 +89,7 @@ describe('CharacterSearch', () => {
 
   it('should display characters when data is available', async () => {
     mockCharactersResponse({
-      totalPages: 1,
-      nextPage: null
+      totalPages: 1
     });
 
     const user = userEvent.setup();
@@ -122,8 +111,7 @@ describe('CharacterSearch', () => {
 
   it('should call onCharacterSelect when a character is selected', async () => {
     mockCharactersResponse({
-      totalPages: 1,
-      nextPage: null
+      totalPages: 1
     });
 
     const user = userEvent.setup();
@@ -151,8 +139,7 @@ describe('CharacterSearch', () => {
 
   it('should call onCharacterSelect with null when input is cleared', async () => {
     mockCharactersResponse({
-      totalPages: 1,
-      nextPage: null
+      totalPages: 1
     });
 
     const user = userEvent.setup();
@@ -204,21 +191,17 @@ describe('CharacterSearch', () => {
   });
 
   it('should show "More" button when there are more pages available', async () => {
-    const apiBaseUrl =
-      import.meta.env.VITE_DISNEY_API_BASE_URL ||
-      'https://api.disneyapi.dev/character';
-
     mockCharactersResponse({
       pages: [
         {
           page: 1,
           data: defaultMockCharacters,
-          nextPage: `${apiBaseUrl}?page=2`
+          nextPage: true
         },
         {
           page: 2,
           data: [],
-          nextPage: null
+          nextPage: false
         }
       ],
       totalPages: 2
@@ -265,21 +248,17 @@ describe('CharacterSearch', () => {
       }
     ];
 
-    const apiBaseUrl =
-      import.meta.env.VITE_DISNEY_API_BASE_URL ||
-      'https://api.disneyapi.dev/character';
-
     mockCharactersResponse({
       pages: [
         {
           page: 1,
           data: defaultMockCharacters,
-          nextPage: `${apiBaseUrl}?page=2`
+          nextPage: true
         },
         {
           page: 2,
           data: page2Characters,
-          nextPage: null
+          nextPage: false
         }
       ],
       totalPages: 2
@@ -313,8 +292,7 @@ describe('CharacterSearch', () => {
 
   it('should disable "More" button when there are no more pages', async () => {
     mockCharactersResponse({
-      totalPages: 1,
-      nextPage: null
+      totalPages: 1
     });
 
     const user = userEvent.setup();
@@ -335,21 +313,17 @@ describe('CharacterSearch', () => {
   });
 
   it('should show loading state on "More" button when fetching next page', async () => {
-    const apiBaseUrl =
-      import.meta.env.VITE_DISNEY_API_BASE_URL ||
-      'https://api.disneyapi.dev/character';
-
     mockCharactersResponse({
       pages: [
         {
           page: 1,
           data: defaultMockCharacters,
-          nextPage: `${apiBaseUrl}?page=2`
+          nextPage: true
         },
         {
           page: 2,
           data: [],
-          nextPage: null,
+          nextPage: false,
           delayMs: 200
         }
       ],

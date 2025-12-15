@@ -42,26 +42,26 @@ export const defaultMockCharacters: TDisneyCharacter[] = [
 type TCharacterHandlerOptions = {
   data?: TDisneyCharacter[];
   totalPages?: number;
-  nextPage?: string | null;
   delayMs?: number;
   pages?: Array<{
     page: number;
     data: TDisneyCharacter[];
-    nextPage?: string | null;
+    nextPage: boolean;
     delayMs?: number;
   }>;
   apiBaseUrl?: string;
 };
 
 export function mockCharactersResponse(options: TCharacterHandlerOptions = {}) {
+  const defaultApiBaseUrl =
+    import.meta.env.VITE_DISNEY_API_BASE_URL ||
+    'https://api.disneyapi.dev/character';
   const {
     data = defaultMockCharacters,
     totalPages = 1,
-    nextPage = null,
     delayMs = 0,
     pages,
-    apiBaseUrl = import.meta.env.VITE_DISNEY_API_BASE_URL ||
-      'https://api.disneyapi.dev/character'
+    apiBaseUrl = defaultApiBaseUrl
   } = options;
 
   if (pages) {
@@ -80,7 +80,9 @@ export function mockCharactersResponse(options: TCharacterHandlerOptions = {}) {
         data: pageData.data,
         info: {
           totalPages: totalPages || pages.length,
-          nextPage: pageData.nextPage ?? null
+          nextPage: pageData.nextPage
+            ? `${apiBaseUrl}?page=${pageData.page + 1}`
+            : null
         }
       });
     });
@@ -92,13 +94,13 @@ export function mockCharactersResponse(options: TCharacterHandlerOptions = {}) {
           await new Promise((resolve) => setTimeout(resolve, delayMs));
           return HttpResponse.json<TApiResponse>({
             data,
-            info: { totalPages, nextPage }
+            info: { totalPages, nextPage: null }
           });
         })
       : http.get(apiBaseUrl, () =>
           HttpResponse.json<TApiResponse>({
             data,
-            info: { totalPages, nextPage }
+            info: { totalPages, nextPage: null }
           })
         );
 

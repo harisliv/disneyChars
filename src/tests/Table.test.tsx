@@ -53,8 +53,7 @@ describe('DisneyCharacterTable', () => {
   it('should render the table with characters', async () => {
     mockCharactersResponse({
       data: mockCharacters,
-      totalPages: 1,
-      nextPage: null
+      totalPages: 1
     });
 
     render(<DisneyCharacterTable />, { wrapper: createWrapper() });
@@ -69,8 +68,7 @@ describe('DisneyCharacterTable', () => {
   it('should render table headers', async () => {
     mockCharactersResponse({
       data: mockCharacters,
-      totalPages: 1,
-      nextPage: null
+      totalPages: 1
     });
 
     render(<DisneyCharacterTable />, { wrapper: createWrapper() });
@@ -87,8 +85,7 @@ describe('DisneyCharacterTable', () => {
   it('should open modal when clicking view details button', async () => {
     mockCharactersResponse({
       data: mockCharacters,
-      totalPages: 1,
-      nextPage: null
+      totalPages: 1
     });
 
     const user = userEvent.setup();
@@ -110,8 +107,7 @@ describe('DisneyCharacterTable', () => {
   it('should close modal when clicking close button', async () => {
     mockCharactersResponse({
       data: mockCharacters,
-      totalPages: 1,
-      nextPage: null
+      totalPages: 1
     });
 
     const user = userEvent.setup();
@@ -145,8 +141,7 @@ describe('DisneyCharacterTable', () => {
   it('should open modal when selecting character from search', async () => {
     mockCharactersResponse({
       data: mockCharacters,
-      totalPages: 1,
-      nextPage: null
+      totalPages: 1
     });
 
     const user = userEvent.setup();
@@ -180,21 +175,17 @@ describe('DisneyCharacterTable', () => {
     const page1Characters = mockCharacters.slice(0, 2);
     const page2Characters = mockCharacters.slice(2);
 
-    const apiBaseUrl =
-      import.meta.env.VITE_DISNEY_API_BASE_URL ||
-      'https://api.disneyapi.dev/character';
-
     mockCharactersResponse({
       pages: [
         {
           page: 1,
           data: page1Characters,
-          nextPage: `${apiBaseUrl}?page=2`
+          nextPage: true
         },
         {
           page: 2,
           data: page2Characters,
-          nextPage: null
+          nextPage: false
         }
       ],
       totalPages: 2
@@ -220,8 +211,7 @@ describe('DisneyCharacterTable', () => {
   it('should change page size when selecting different rows per page', async () => {
     mockCharactersResponse({
       data: mockCharacters,
-      totalPages: 1,
-      nextPage: null
+      totalPages: 1
     });
 
     const user = userEvent.setup();
@@ -245,8 +235,7 @@ describe('DisneyCharacterTable', () => {
   it('should sort columns when clicking column headers', async () => {
     mockCharactersResponse({
       data: mockCharacters,
-      totalPages: 1,
-      nextPage: null
+      totalPages: 1
     });
 
     const user = userEvent.setup();
@@ -270,8 +259,7 @@ describe('DisneyCharacterTable', () => {
   it('should toggle column visibility', async () => {
     mockCharactersResponse({
       data: mockCharacters,
-      totalPages: 1,
-      nextPage: null
+      totalPages: 1
     });
 
     const user = userEvent.setup();
@@ -303,8 +291,7 @@ describe('DisneyCharacterTable', () => {
   it('should display character search component', async () => {
     mockCharactersResponse({
       data: mockCharacters,
-      totalPages: 1,
-      nextPage: null
+      totalPages: 1
     });
 
     render(<DisneyCharacterTable />, { wrapper: createWrapper() });
@@ -317,21 +304,17 @@ describe('DisneyCharacterTable', () => {
   });
 
   it('should reset to first page when changing page size', async () => {
-    const apiBaseUrl =
-      import.meta.env.VITE_DISNEY_API_BASE_URL ||
-      'https://api.disneyapi.dev/character';
-
     mockCharactersResponse({
       pages: [
         {
           page: 1,
           data: mockCharacters.slice(0, 2),
-          nextPage: `${apiBaseUrl}?page=2`
+          nextPage: true
         },
         {
           page: 2,
           data: mockCharacters.slice(2),
-          nextPage: null
+          nextPage: false
         }
       ],
       totalPages: 2
@@ -366,8 +349,7 @@ describe('DisneyCharacterTable', () => {
   it('should display pagination controls', async () => {
     mockCharactersResponse({
       data: mockCharacters,
-      totalPages: 1,
-      nextPage: null
+      totalPages: 1
     });
 
     render(<DisneyCharacterTable />, { wrapper: createWrapper() });
@@ -399,8 +381,7 @@ describe('DisneyCharacterTable', () => {
   it('should handle sorting in both directions', async () => {
     mockCharactersResponse({
       data: mockCharacters,
-      totalPages: 1,
-      nextPage: null
+      totalPages: 1
     });
 
     const user = userEvent.setup();
