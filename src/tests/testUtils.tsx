@@ -1,14 +1,6 @@
 import { http, HttpResponse } from 'msw';
-import type { TDisneyCharacter } from '@/types';
+import type { TApiResponse, TDisneyCharacter } from '@/types';
 import { server } from '../mocks/server';
-
-type TApiResponse = {
-  data: TDisneyCharacter[];
-  info: {
-    totalPages: number;
-    nextPage: string | null;
-  };
-};
 
 export const defaultMockCharacters: TDisneyCharacter[] = [
   {

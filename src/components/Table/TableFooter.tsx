@@ -11,7 +11,7 @@ import type { TTableProps } from '@/types';
 export function TableFooter({ table }: TTableProps) {
   const { setPagination } = usePagination();
   const { pageSize, pageIndex } = table.getState().pagination;
-  const { totalCount, isFetching } = usePaginatedCharacters();
+  const { totalCount, isFetching, emptyResults } = usePaginatedCharacters();
   return (
     <Box
       sx={{
@@ -30,7 +30,7 @@ export function TableFooter({ table }: TTableProps) {
         count={totalCount ?? 0}
         rowsPerPage={pageSize}
         page={pageIndex}
-        disabled={isFetching}
+        disabled={isFetching || emptyResults}
         labelDisplayedRows={
           isFetching ? () => <CircularProgress size={20} /> : undefined
         }
@@ -38,7 +38,7 @@ export function TableFooter({ table }: TTableProps) {
           select: {
             inputProps: { 'aria-label': 'rows per page' },
             native: true,
-            disabled: isFetching
+            disabled: isFetching || emptyResults
           }
         }}
         onPageChange={(_, page) => {

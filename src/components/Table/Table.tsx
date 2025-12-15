@@ -16,6 +16,7 @@ import { CharacterSearch } from '@/components/CharacterSearch';
 import { usePagination } from '@/hooks';
 import { usePaginatedCharacters } from '@/hooks';
 import type { TDisneyCharacter } from '@/types';
+import { EmptyResults } from '../EmptyResults';
 
 const initialColumnVisibility: VisibilityState = {
   allies: false,
@@ -79,7 +80,11 @@ export default function DisneyCharacterTable() {
         <StyledTableContainer>
           <StyledTable stickyHeader>
             <TableHeader table={table} />
-            <TableBodyComponent table={table} />
+            {queryData && queryData.length > 0 ? (
+              <TableBodyComponent table={table} />
+            ) : (
+              <EmptyResults table={table} />
+            )}
           </StyledTable>
         </StyledTableContainer>
         <TableFooter table={table} />

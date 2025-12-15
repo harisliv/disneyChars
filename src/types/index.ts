@@ -34,3 +34,11 @@ export interface INormalizedError {
   type: 'network' | 'server' | 'client' | 'unknown';
   details?: string;
 }
+
+export type TApiResponse = {
+  data: TDisneyCharacter[] | TDisneyCharacter;
+  info: {
+    totalPages: number;
+    nextPage: string | null;
+  };
+};

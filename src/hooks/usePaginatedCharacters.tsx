@@ -1,7 +1,7 @@
-import type { TDisneyCharacter } from '@/types';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import { usePagination } from './usePagination';
 import useGetQueryParamRoutes from './useGetQueryParamRoutes';
+import { convertToPieChartData, convertToTableEntity } from '@/utils';
 
 export function usePaginatedCharacters() {
   const { pagination } = usePagination();
@@ -13,32 +13,25 @@ export function usePaginatedCharacters() {
 
   const { fetcher } = useGetQueryParamRoutes();
 
-  const query = useQuery<{
-    data: TDisneyCharacter[];
-    info: { totalPages: number };
-  }>({
+  const query = useQuery({
     queryKey: ['disneyCharacters', pagination],
     placeholderData: keepPreviousData,
     queryFn: ({ signal }) => fetcher(queryParams, signal)
   });
-  const characters = query.data?.data ?? [];
 
-  const pieChartData = characters.map((char) => ({
-    name: char.name,
-    y: char.films.length,
-    films: char.films
-  }));
+  const characters = convertToTableEntity(query.data?.data ?? []);
+
+  const pieChartData = convertToPieChartData(characters);
 
   const totalCount = query.data?.info?.totalPages
     ? query.data.info.totalPages * pagination.pageSize
     : 0;
 
   return {
+    ...query,
     data: characters,
     totalCount,
     pieChartData,
-    isLoading: query.isLoading,
-    isFetching: query.isFetching,
-    isPlaceholderData: query.isPlaceholderData
+    emptyResults: characters.length === 0
   };
 }

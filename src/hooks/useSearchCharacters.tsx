@@ -1,6 +1,7 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
 import type { TQueryParams } from '@/types';
 import useGetQueryParamRoutes from './useGetQueryParamRoutes';
+import { convertToTableEntity } from '@/utils';
 
 export function useSearchCharacters(queryParams: TQueryParams) {
   const { fetcher } = useGetQueryParamRoutes();
@@ -32,10 +33,7 @@ export function useSearchCharacters(queryParams: TQueryParams) {
   const characters =
     query.data?.pages.flatMap((page) => {
       const data = page.data;
-      if (!Array.isArray(data) && data._id) {
-        return [data];
-      }
-      return data;
+      return convertToTableEntity(data ?? []);
     }) ?? [];
 
   return {

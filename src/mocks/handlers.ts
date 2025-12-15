@@ -1,17 +1,9 @@
-import type { TDisneyCharacter } from '@/types';
+import type { TApiResponse, TDisneyCharacter } from '@/types';
 import { http, HttpResponse } from 'msw';
 
 const apiBaseUrl =
   import.meta.env.VITE_DISNEY_API_BASE_URL ||
   'https://api.disneyapi.dev/character';
-
-type TApiResponse = {
-  data: TDisneyCharacter[];
-  info: {
-    totalPages: number;
-    nextPage: string | null;
-  };
-};
 
 export const handlers = [
   http.get(`${apiBaseUrl}`, ({ request }) => {

@@ -1,11 +1,10 @@
 import { usePaginatedCharacters } from '@/hooks';
 import { Box, CircularProgress, Grid } from '@mui/material';
-import { EmptyResults } from '../EmptyResults';
 import { DisneyCharacterTable } from '../Table';
 import { CharacterFilmsPieChart } from '../CharacterFilmsPieChart';
 
 export default function MainContent() {
-  const { isLoading, data } = usePaginatedCharacters();
+  const { isLoading } = usePaginatedCharacters();
 
   if (isLoading) {
     return (
@@ -20,10 +19,6 @@ export default function MainContent() {
         <CircularProgress size={60} />
       </Box>
     );
-  }
-
-  if (!data || data.length === 0) {
-    return <EmptyResults />;
   }
 
   return (
