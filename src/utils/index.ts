@@ -1,2 +1,2 @@
-export * from './exportPie';
+export * from './error';
 export * from './queryClient';

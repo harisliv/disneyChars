@@ -5,7 +5,7 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import { CardContainer, CardHeader } from '@/components/Card';
-import { exportPieChartToExcel } from '@/utils/exportPie';
+import { useExportPie } from '@/hooks';
 
 interface IPiePointWithFilms extends Highcharts.Point {
   films?: string[];
@@ -14,9 +14,10 @@ interface IPiePointWithFilms extends Highcharts.Point {
 
 export default function CharacterFilmsPieChart() {
   const { pieChartData } = usePaginatedCharacters();
+  const exportToExcel = useExportPie();
 
   const handleExport = () => {
-    exportPieChartToExcel(pieChartData);
+    exportToExcel();
   };
 
   return (

@@ -5,53 +5,12 @@ import Button from '@mui/material/Button';
 import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
-import axios from 'axios';
+import { handleError } from '@/utils';
 
 interface IErrorFallbackProps {
   error: Error;
   resetErrorBoundary: () => void;
 }
-
-interface INormalizedError {
-  message: string;
-  status?: number;
-  type: 'network' | 'server' | 'client' | 'unknown';
-  details?: string;
-}
-
-const handleError = (error: unknown): INormalizedError => {
-  if (axios.isAxiosError(error)) {
-    if (error.response) {
-      return {
-        message: error.response.data?.message || 'Server error occurred',
-        status: error.response.status,
-        type: 'server',
-        details: `HTTP ${error.response.status}: ${error.response.statusText}`
-      };
-    }
-  }
-
-  if (error instanceof Error) {
-    return {
-      message: error.message,
-      type: 'unknown',
-      details: error.name !== 'Error' ? error.name : undefined
-    };
-  }
-
-  if (typeof error === 'string') {
-    return {
-      message: error,
-      type: 'unknown'
-    };
-  }
-
-  return {
-    message: 'An unexpected error occurred',
-    type: 'unknown',
-    details: String(error)
-  };
-};
 
 function ErrorFallback({ error, resetErrorBoundary }: IErrorFallbackProps) {
   const normalizedError = handleError(error);

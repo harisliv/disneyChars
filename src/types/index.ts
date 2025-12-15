@@ -27,3 +27,10 @@ export type TQueryParams = {
   page?: number;
   pageSize?: number;
 };
+
+export interface INormalizedError {
+  message: string;
+  status?: number;
+  type: 'network' | 'server' | 'client' | 'unknown';
+  details?: string;
+}

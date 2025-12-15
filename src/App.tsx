@@ -1,6 +1,6 @@
 import { QueryClientProvider } from '@tanstack/react-query';
 import { ErrorBoundary, MainContent } from '@/components';
-import { PaginationProvider } from '@/context';
+import { PaginationProvider, SnackbarProvider } from '@/context';
 import { queryClient } from '@/utils';
 
 export default function App() {
@@ -8,7 +8,9 @@ export default function App() {
     <ErrorBoundary>
       <QueryClientProvider client={queryClient}>
         <PaginationProvider>
-          <MainContent />
+          <SnackbarProvider>
+            <MainContent />
+          </SnackbarProvider>
         </PaginationProvider>
       </QueryClientProvider>
     </ErrorBoundary>
