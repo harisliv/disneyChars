@@ -80,9 +80,10 @@ export function mockCharactersResponse(options: TCharacterHandlerOptions = {}) {
         data: pageData.data,
         info: {
           totalPages: totalPages || pages.length,
-          nextPage: pageData.nextPage
-            ? `${apiBaseUrl}?page=${pageData.page + 1}`
-            : null
+          nextPage:
+            pageData.nextPage && pageParam
+              ? `${apiBaseUrl}?page=${pageData.page + 1}`
+              : null
         }
       });
     });

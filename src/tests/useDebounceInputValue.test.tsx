@@ -2,13 +2,34 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
 import { useDebounceInputValue } from '../hooks/useDebounceInputValue';
 
+const cancelSpy = vi.fn();
+
+vi.mock('lodash.debounce', async (importOriginal) => {
+  const originalModule = await importOriginal<{
+    default: typeof import('lodash.debounce');
+  }>();
+  return {
+    default: (fn: (...args: any[]) => void, delay: number) => {
+      const debouncedFn = originalModule.default(fn, delay);
+      const originalCancel = debouncedFn.cancel;
+
+      debouncedFn.cancel = () => {
+        cancelSpy();
+        originalCancel();
+      };
+
+      return debouncedFn;
+    }
+  };
+});
+
 describe('useDebounceInputValue', () => {
   beforeEach(() => {
     vi.useFakeTimers();
+    cancelSpy.mockClear();
   });
 
   afterEach(() => {
-    vi.restoreAllMocks();
     vi.useRealTimers();
   });
 
@@ -108,11 +129,7 @@ describe('useDebounceInputValue', () => {
 
     unmount();
 
-    act(() => {
-      vi.advanceTimersByTime(500);
-    });
-
-    expect(true).toBe(true);
+    expect(cancelSpy).toHaveBeenCalled();
   });
 
   it('should handle multiple value changes correctly', () => {
