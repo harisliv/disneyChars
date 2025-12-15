@@ -27,11 +27,9 @@ describe('useDebounceInputValue', () => {
 
     expect(result.current).toBe('initial');
 
-    // Update the value
     rerender({ value: 'updated' });
-    expect(result.current).toBe('initial'); // Should still be initial
+    expect(result.current).toBe('initial');
 
-    // Fast-forward time by 500ms (default delay)
     act(() => {
       vi.advanceTimersByTime(500);
     });
@@ -50,20 +48,18 @@ describe('useDebounceInputValue', () => {
 
     expect(result.current).toBe('initial');
 
-    // Update the value
     rerender({ value: 'updated' });
-    expect(result.current).toBe('initial'); // Should still be initial
+    expect(result.current).toBe('initial');
 
-    // Fast-forward time by less than delay
     act(() => {
       vi.advanceTimersByTime(500);
     });
-    expect(result.current).toBe('initial'); // Should still be initial
+    expect(result.current).toBe('initial');
 
-    // Fast-forward the remaining time
     act(() => {
       vi.advanceTimersByTime(500);
     });
+
     expect(result.current).toBe('updated');
   });
 
@@ -75,7 +71,6 @@ describe('useDebounceInputValue', () => {
       }
     );
 
-    // Rapidly change the value multiple times
     rerender({ value: 'change1' });
     act(() => {
       vi.advanceTimersByTime(200);
@@ -91,15 +86,12 @@ describe('useDebounceInputValue', () => {
       vi.advanceTimersByTime(200);
     });
 
-    // Should still be initial (none of the changes have passed the delay)
     expect(result.current).toBe('initial');
 
-    // Fast-forward past the delay from the last change
     act(() => {
       vi.advanceTimersByTime(300);
     });
 
-    // Should only have the last value
     expect(result.current).toBe('change3');
   });
 
@@ -114,16 +106,12 @@ describe('useDebounceInputValue', () => {
     rerender({ value: 'updated' });
     expect(result.current).toBe('initial');
 
-    // Unmount before delay completes
     unmount();
 
-    // Fast-forward time
     act(() => {
       vi.advanceTimersByTime(500);
     });
 
-    // The hook is unmounted, so we can't check result.current
-    // But we can verify no errors occurred
     expect(true).toBe(true);
   });
 
@@ -161,15 +149,12 @@ describe('useDebounceInputValue', () => {
     const initialValue = result.current;
     expect(initialValue).toBe('same');
 
-    // Rerender with the same value
     rerender({ value: 'same' });
 
-    // Fast-forward time
     act(() => {
       vi.advanceTimersByTime(500);
     });
 
-    // Value should remain the same (no unnecessary updates)
     expect(result.current).toBe('same');
   });
 });

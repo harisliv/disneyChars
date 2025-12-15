@@ -2,11 +2,18 @@ import '@testing-library/jest-dom';
 import { afterAll, afterEach, beforeAll } from 'vitest';
 import { server } from '../mocks/server';
 
-// Start server before all tests
+// Highchart hack for tests
+if (typeof window !== 'undefined') {
+  if (!window.CSS) {
+    window.CSS = {} as typeof CSS;
+  }
+  if (!window.CSS.supports) {
+    window.CSS.supports = () => false;
+  }
+}
+
 beforeAll(() => server.listen({ onUnhandledRequest: 'error' }));
 
-// Close server after all tests
 afterAll(() => server.close());
 
-// Reset handlers after each test for test isolation
 afterEach(() => server.resetHandlers());

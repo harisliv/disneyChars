@@ -1,7 +1,6 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
 import type { TDisneyCharacter, TQueryParams } from '@/types';
-import axios from 'axios';
-import queryString from 'query-string';
+import useGetQueryParamRoutes from './useGetQueryParamRoutes';
 
 type TApiResponse = {
   data: TDisneyCharacter[];
@@ -11,24 +10,11 @@ type TApiResponse = {
   };
 };
 
-const getFilteredCharacters = async (
-  queryParams: TQueryParams,
-  signal: AbortSignal
-): Promise<TApiResponse> => {
-  const stringifiedQueryParams = queryString.stringify(queryParams);
-
-  const response = await axios.get(
-    `${import.meta.env.VITE_DISNEY_API_BASE_URL}?${stringifiedQueryParams}`,
-    { signal }
-  );
-
-  return response.data;
-};
-
 export function useSearchCharacters(
   queryParams: Omit<TQueryParams, 'page' | 'pageSize'>,
   pageSize: number = 50
 ) {
+  const { fetcher } = useGetQueryParamRoutes();
   const hasSearchTerm = Object.values(queryParams).some(
     (value) => value && String(value).trim().length > 0
   );
@@ -36,7 +22,7 @@ export function useSearchCharacters(
   const query = useInfiniteQuery<TApiResponse>({
     queryKey: ['characters', queryParams, pageSize],
     queryFn: ({ pageParam = 1, signal }) =>
-      getFilteredCharacters(
+      fetcher(
         {
           ...queryParams,
           page: pageParam as number,

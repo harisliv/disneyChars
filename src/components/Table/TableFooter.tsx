@@ -1,4 +1,9 @@
-import { Box, TablePagination, TablePaginationActions } from '@mui/material';
+import {
+  Box,
+  CircularProgress,
+  TablePagination,
+  TablePaginationActions
+} from '@mui/material';
 import { ColumnVisibilityMenu } from './ColumnVisibilityMenu';
 import { usePaginatedCharacters, usePagination } from '@/hooks';
 import type { TTableProps } from '@/types';
@@ -26,6 +31,9 @@ export function TableFooter({ table }: TTableProps) {
         rowsPerPage={pageSize}
         page={pageIndex}
         disabled={isFetching}
+        labelDisplayedRows={
+          isFetching ? () => <CircularProgress size={20} /> : undefined
+        }
         slotProps={{
           select: {
             inputProps: { 'aria-label': 'rows per page' },
