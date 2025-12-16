@@ -33,7 +33,7 @@ export function useSearchCharacters(queryParams: TQueryParams) {
   const characters =
     query.data?.pages.flatMap((page) => {
       const data = page.data;
-      return convertToTableEntity(data ?? []);
+      return convertToTableEntity(data);
     }) ?? [];
 
   return {
