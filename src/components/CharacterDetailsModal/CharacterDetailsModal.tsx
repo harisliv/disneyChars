@@ -17,6 +17,7 @@ import {
 } from '@mui/material';
 import { useState } from 'react';
 import { useSingleCharacter } from '@/hooks';
+import { CenteredContainerWithVerticalPadding } from '../shared';
 
 interface ICharacterDetailsModalProps {
   open: boolean;
@@ -87,9 +88,9 @@ export function CharacterDetailsModal({
       <DialogTitle>Character Details</DialogTitle>
       <DialogContent>
         {isLoading && (
-          <Box display="flex" justifyContent="center" py={4}>
+          <CenteredContainerWithVerticalPadding>
             <CircularProgress />
-          </Box>
+          </CenteredContainerWithVerticalPadding>
         )}
 
         {error && (

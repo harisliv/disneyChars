@@ -11,6 +11,8 @@ import {
 } from '@mui/material';
 import { useDebounceInputValue, useSearchCharacters } from '@/hooks';
 import type { TDisneyCharacter, TSearchType } from '@/types';
+import { FlexRowGap } from '../shared';
+import { CenteredDividerBorderTop } from './CharacterSearch.styles';
 
 interface ICharacterSearchProps {
   onCharacterSelect: (character: TDisneyCharacter | null) => void;
@@ -42,16 +44,7 @@ function CustomPaper(
     <Paper {...paperProps}>
       {paperProps.children}
       {showMoreButton && (
-        <Box
-          onMouseDown={(e) => e.preventDefault()}
-          sx={{
-            borderTop: 1,
-            borderColor: 'divider',
-            p: 1,
-            display: 'flex',
-            justifyContent: 'center'
-          }}
-        >
+        <CenteredDividerBorderTop onMouseDown={(e) => e.preventDefault()}>
           <Button
             size="small"
             fullWidth
@@ -66,7 +59,7 @@ function CustomPaper(
           >
             {isLoadingMore ? 'Loading...' : 'More'}
           </Button>
-        </Box>
+        </CenteredDividerBorderTop>
       )}
     </Paper>
   );
@@ -115,7 +108,7 @@ export function CharacterSearch({ onCharacterSelect }: ICharacterSearchProps) {
   };
 
   return (
-    <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
+    <FlexRowGap>
       <ToggleButtonGroup
         value={searchType}
         exclusive
@@ -183,6 +176,6 @@ export function CharacterSearch({ onCharacterSelect }: ICharacterSearchProps) {
           </Box>
         )}
       />
-    </Box>
+    </FlexRowGap>
   );
 }

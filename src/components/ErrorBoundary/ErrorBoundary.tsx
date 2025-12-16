@@ -1,11 +1,11 @@
 import { ErrorBoundary as ReactErrorBoundary } from 'react-error-boundary';
-import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import { handleError } from '@/utils';
+import { ErrorBoundaryContainer } from './ErrorBoundary.styles';
 
 interface IErrorFallbackProps {
   error: Error;
@@ -16,16 +16,7 @@ function ErrorFallback({ error, resetErrorBoundary }: IErrorFallbackProps) {
   const normalizedError = handleError(error);
 
   return (
-    <Box
-      sx={{
-        height: '100vh',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        p: 3,
-        boxSizing: 'border-box'
-      }}
-    >
+    <ErrorBoundaryContainer>
       <Alert
         severity="error"
         icon={<ErrorOutlineIcon />}
@@ -54,7 +45,7 @@ function ErrorFallback({ error, resetErrorBoundary }: IErrorFallbackProps) {
           </Typography>
         )}
       </Alert>
-    </Box>
+    </ErrorBoundaryContainer>
   );
 }
 

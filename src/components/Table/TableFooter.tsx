@@ -1,5 +1,4 @@
 import {
-  Box,
   CircularProgress,
   TablePagination,
   TablePaginationActions
@@ -7,22 +6,14 @@ import {
 import { ColumnVisibilityMenu } from './ColumnVisibilityMenu';
 import { usePaginatedCharacters, usePagination } from '@/hooks';
 import type { TTableProps } from '@/types';
+import { TableFooterContainer } from './TableFooter.styles';
 
 export function TableFooter({ table }: TTableProps) {
   const { setPagination } = usePagination();
   const { pageSize, pageIndex } = table.getState().pagination;
   const { totalCount, isFetching, emptyResults } = usePaginatedCharacters();
   return (
-    <Box
-      sx={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        borderTop: '1px solid',
-        borderColor: 'divider',
-        pl: 2
-      }}
-    >
+    <TableFooterContainer>
       <ColumnVisibilityMenu table={table} />
       <TablePagination
         rowsPerPageOptions={[10, 20, 50, 100, 200, 500]}
@@ -57,6 +48,6 @@ export function TableFooter({ table }: TTableProps) {
         }}
         ActionsComponent={TablePaginationActions}
       />
-    </Box>
+    </TableFooterContainer>
   );
 }

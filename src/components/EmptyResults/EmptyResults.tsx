@@ -1,8 +1,8 @@
 import { TableBody, TableCell, TableRow } from '@mui/material';
-import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import InboxIcon from '@mui/icons-material/Inbox';
 import type { TTableProps } from '@/types';
+import { CenteredColumnContainerTextCenter } from '../shared';
 
 export function EmptyResults({ table }: TTableProps) {
   const visibleColumnsCount = table.getVisibleLeafColumns().length;
@@ -11,15 +11,7 @@ export function EmptyResults({ table }: TTableProps) {
     <TableBody>
       <TableRow>
         <TableCell colSpan={visibleColumnsCount} sx={{ border: 'none', py: 8 }}>
-          <Box
-            sx={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              justifyContent: 'center',
-              textAlign: 'center'
-            }}
-          >
+          <CenteredColumnContainerTextCenter>
             <InboxIcon
               sx={{
                 fontSize: 120,
@@ -44,7 +36,7 @@ export function EmptyResults({ table }: TTableProps) {
               There are no Disney characters to display at the moment. Please
               try again later or check your search criteria.
             </Typography>
-          </Box>
+          </CenteredColumnContainerTextCenter>
         </TableCell>
       </TableRow>
     </TableBody>

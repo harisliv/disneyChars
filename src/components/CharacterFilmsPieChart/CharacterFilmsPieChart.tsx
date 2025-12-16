@@ -1,11 +1,11 @@
 import { usePaginatedCharacters } from '@/hooks';
 import { Chart, Series, Tooltip } from '@highcharts/react';
 import type Highcharts from 'highcharts';
-import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import { CardContainer, CardHeader } from '@/components/Card';
 import { useExportPie } from '@/hooks';
+import { FlexCenteredContainerWithPadding } from '../shared';
 
 interface IPiePointWithFilms extends Highcharts.Point {
   films?: string[];
@@ -36,15 +36,7 @@ export default function CharacterFilmsPieChart() {
           </Button>
         }
       />
-      <Box
-        sx={{
-          flex: 1,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          p: 2
-        }}
-      >
+      <FlexCenteredContainerWithPadding>
         {emptyResults ? (
           <Chart>
             <Tooltip
@@ -99,7 +91,7 @@ export default function CharacterFilmsPieChart() {
             />
           </Chart>
         )}
-      </Box>
+      </FlexCenteredContainerWithPadding>
     </CardContainer>
   );
 }
