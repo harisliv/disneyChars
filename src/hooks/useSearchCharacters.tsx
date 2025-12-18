@@ -2,6 +2,7 @@ import { useInfiniteQuery } from '@tanstack/react-query';
 import type { TQueryParams } from '@/types';
 import useGetQueryParamRoutes from './useGetQueryParamRoutes';
 import { convertToTableEntity } from '@/utils';
+import { useMemo } from 'react';
 
 export function useSearchCharacters(queryParams: TQueryParams) {
   const { fetcher } = useGetQueryParamRoutes();
@@ -30,17 +31,13 @@ export function useSearchCharacters(queryParams: TQueryParams) {
     enabled: hasSearchTerm
   });
 
-  const characters =
-    query.data?.pages.flatMap((page) => {
-      const data = page.data;
-      return convertToTableEntity(data);
-    }) ?? [];
+  const characters = useMemo(
+    () => query.data?.pages.flatMap((page) => convertToTableEntity(page.data)),
+    [query.data]
+  );
 
   return {
     ...query,
-    data: characters,
-    hasNextPage: query.hasNextPage,
-    fetchNextPage: query.fetchNextPage,
-    isFetchingNextPage: query.isFetchingNextPage
+    data: characters ?? []
   };
 }
