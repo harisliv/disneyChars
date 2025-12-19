@@ -1,6 +1,5 @@
-import * as React from 'react';
 import debounce from 'lodash.debounce';
-import { useRef } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
 /**
  * Simplified debounce hook for string input values.
@@ -13,16 +12,16 @@ export function useDebounceInputValue(
   value: string,
   delay: number = 500
 ): string {
-  const [debouncedValue, setDebouncedValue] = React.useState(value);
+  const [debouncedValue, setDebouncedValue] = useState(value);
   const previousValueRef = useRef<string>(value);
 
   // Memoize the debounced function to avoid recreating it on every render
-  const debouncedSetter = React.useMemo(
+  const debouncedSetter = useMemo(
     () => debounce(setDebouncedValue, delay),
     [delay]
   );
 
-  React.useEffect(() => {
+  useEffect(() => {
     // Only call the debounced function if the value has actually changed
     if (previousValueRef.current !== value) {
       debouncedSetter(value);
