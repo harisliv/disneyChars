@@ -32,7 +32,7 @@ export function useSearchCharacters(queryParams: TQueryParams) {
   });
 
   const characters = useMemo(
-    () => query.data?.pages.flatMap((page) => convertToTableEntity(page.data)),
+    () => query.data?.pages.flatMap((page) => convertToTableEntity(page.data)) ?? [],
     [query.data]
   );
 
