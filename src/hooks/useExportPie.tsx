@@ -2,12 +2,13 @@ import * as XLSX from 'xlsx';
 import { handleError } from '../utils/error';
 import { usePaginatedCharacters } from './usePaginatedCharacters';
 import { useSnackbar } from './useSnackbar';
+import { useCallback } from 'react';
 
 export function useExportPie() {
   const { pieChartData } = usePaginatedCharacters();
   const { setSnackbar } = useSnackbar();
 
-  const exportToExcel = () => {
+  const exportToExcel = useCallback(() => {
     try {
       const excelData = pieChartData.map((item) => ({
         'Character Name': item.name,
@@ -34,7 +35,7 @@ export function useExportPie() {
       const { message } = handleError(error);
       setSnackbar({ message, status: 'error', open: true });
     }
-  };
+  }, [pieChartData, setSnackbar]);
 
   return exportToExcel;
 }
