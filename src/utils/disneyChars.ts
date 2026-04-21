@@ -13,14 +13,12 @@ export const isArrayOfCharacters = (
 
 export const convertToTableEntity = (
   data: TDisneyCharacter | TDisneyCharacter[]
-): TDisneyCharacter[] => {
-  return isArrayOfCharacters(data) ? data : [data];
-};
+): TDisneyCharacter[] => (isArrayOfCharacters(data) ? data : [data]);
 
 export const convertToPieChartData = (
   characters: TDisneyCharacter[]
-): { name: string; y: number; films: string[] }[] => {
-  return characters.length > 0
+): { name: string; y: number; films: string[] }[] =>
+  characters.length > 0
     ? characters.map((char) => ({
         name: char.name,
         y: char.films.length,
@@ -33,4 +31,3 @@ export const convertToPieChartData = (
           films: []
         }
       ];
-};
