@@ -1,11 +1,11 @@
 import * as XLSX from 'xlsx';
 import { handleError } from '../utils/error';
-import { usePaginatedCharacters } from './usePaginatedCharacters';
 import { useSnackbar } from './useSnackbar';
 import { useCallback } from 'react';
 
-export function useExportPie() {
-  const { pieChartData } = usePaginatedCharacters();
+export function useExportPie(
+  pieChartData: { name: string; y: number; films: string[] }[]
+) {
   const { setSnackbar } = useSnackbar();
 
   const exportToExcel = useCallback(() => {

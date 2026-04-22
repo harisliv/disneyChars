@@ -1,4 +1,4 @@
-import { usePaginatedCharacters } from '@/hooks';
+import { useCharactersPieData } from '@/hooks';
 import { Chart, Series, Tooltip } from '@highcharts/react';
 import type Highcharts from 'highcharts';
 import Button from '@mui/material/Button';
@@ -6,38 +6,39 @@ import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import { CardContainer, CardHeader } from '@/components/Card';
 import { useExportPie } from '@/hooks';
 import { FlexCenteredContainerWithPadding } from '../shared';
+import type { TDisneyCharacter } from '@/types';
 
 interface IPiePointWithFilms extends Highcharts.Point {
   films?: string[];
   percentage?: number;
 }
 
-export default function CharacterFilmsPieChart() {
-  const { pieChartData, emptyResults } = usePaginatedCharacters();
-  const exportToExcel = useExportPie();
+interface ICharacterFilmsPieChartProps {
+  characters: TDisneyCharacter[];
+}
 
-  const handleExport = () => {
-    exportToExcel();
-  };
+export default function CharacterFilmsPieChart({
+  characters
+}: ICharacterFilmsPieChartProps) {
+  const pieChartData = useCharactersPieData(characters);
+  const exportToExcel = useExportPie(pieChartData);
 
   return (
     <CardContainer>
-      <CardHeader
-        title="Films Distribution"
-        actions={
-          <Button
-            variant="outlined"
-            size="small"
-            startIcon={<FileDownloadIcon />}
-            onClick={handleExport}
-            disabled={emptyResults}
-          >
-            Export to Excel
-          </Button>
-        }
-      />
+      <CardHeader title="Films Distribution">
+        <Button
+          variant="outlined"
+          size="small"
+          startIcon={<FileDownloadIcon />}
+          onClick={exportToExcel}
+          disabled={characters.length === 0}
+        >
+          Export to Excel
+        </Button>
+      </CardHeader>
+
       <FlexCenteredContainerWithPadding>
-        {emptyResults ? (
+        {characters.length === 0 ? (
           <Chart>
             <Tooltip
               useHTML

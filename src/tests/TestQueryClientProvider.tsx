@@ -1,6 +1,6 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useState, type ReactNode } from 'react';
-import { SnackbarProvider } from '@/context';
+import { CharacterModalProvider, SnackbarProvider } from '@/context';
 
 export function createTestQueryClient() {
   return new QueryClient({
@@ -20,7 +20,9 @@ export function TestQueryClientProvider({ children }: { children: ReactNode }) {
   const [queryClient] = useState(() => createTestQueryClient());
   return (
     <QueryClientProvider client={queryClient}>
-      <SnackbarProvider>{children}</SnackbarProvider>
+      <SnackbarProvider>
+        <CharacterModalProvider>{children}</CharacterModalProvider>
+      </SnackbarProvider>
     </QueryClientProvider>
   );
 }

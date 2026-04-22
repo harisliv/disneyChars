@@ -19,9 +19,10 @@ import { useState } from 'react';
 import { useSingleCharacter } from '@/hooks';
 import { CenteredContainerWithVerticalPadding } from '../shared';
 
-interface ICharacterDetailsModalProps {
+interface ICharacterModalProps {
   open: boolean;
   onClose: () => void;
+  onExited: () => void;
   characterId: string | null;
 }
 
@@ -60,11 +61,12 @@ function CharacterImage({ imageUrl, name }: ICharacterImageProps) {
   );
 }
 
-export function CharacterDetailsModal({
+export function CharacterModal({
   open,
   onClose,
+  onExited,
   characterId
-}: ICharacterDetailsModalProps) {
+}: ICharacterModalProps) {
   const {
     data: character,
     isLoading,
@@ -81,7 +83,8 @@ export function CharacterDetailsModal({
       slots={{ transition: Fade }}
       slotProps={{
         transition: {
-          timeout: 500
+          timeout: 500,
+          onExited
         }
       }}
     >

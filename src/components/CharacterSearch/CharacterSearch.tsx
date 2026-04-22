@@ -9,14 +9,14 @@ import {
   Button,
   Paper
 } from '@mui/material';
-import { useDebounceInputValue, useSearchCharacters } from '@/hooks';
-import type { TDisneyCharacter, TSearchType } from '@/types';
+import {
+  useCharacterModal,
+  useDebounceInputValue,
+  useSearchCharacters
+} from '@/hooks';
+import type { TSearchType } from '@/types';
 import { FlexRowGap } from '../shared';
 import { CenteredDividerBorderTop } from './CharacterSearch.styles';
-
-interface ICharacterSearchProps {
-  onCharacterSelect: (character: TDisneyCharacter | null) => void;
-}
 
 function CustomPaper(
   props: React.ComponentProps<typeof Paper> & {
@@ -65,7 +65,8 @@ function CustomPaper(
   );
 }
 
-export function CharacterSearch({ onCharacterSelect }: ICharacterSearchProps) {
+export function CharacterSearch() {
+  const { openCharacterDetails } = useCharacterModal();
   const [inputValue, setInputValue] = useState('');
   const [searchType, setSearchType] = useState<TSearchType>('name');
   const debouncedSearchTerm = useDebounceInputValue(inputValue, 500);
@@ -130,7 +131,11 @@ export function CharacterSearch({ onCharacterSelect }: ICharacterSearchProps) {
         loading={isLoading}
         inputValue={inputValue}
         onInputChange={(_, newInputValue) => setInputValue(newInputValue)}
-        onChange={(_, value) => onCharacterSelect(value)}
+        onChange={(_, value) => {
+          if (value) {
+            openCharacterDetails(value._id);
+          }
+        }}
         filterOptions={(x) => x}
         sx={{ minWidth: 300 }}
         noOptionsText={noOptionsText}

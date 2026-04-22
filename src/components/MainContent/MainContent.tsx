@@ -1,4 +1,4 @@
-import { usePaginatedCharacters } from '@/hooks';
+import { useCharactersLoading, usePaginatedCharacters } from '@/hooks';
 import { CircularProgress } from '@mui/material';
 import { DisneyCharacterTable } from '../Table';
 import { CharacterFilmsPieChart } from '../CharacterFilmsPieChart';
@@ -8,9 +8,10 @@ import {
   MaxWidthFlexContainer
 } from '../shared';
 import { MainContentContainer } from './MainContent.styles';
+import { CharacterModalProvider } from '@/context';
 
 export default function MainContent() {
-  const { isLoading } = usePaginatedCharacters();
+  const { isLoading, data: characters, totalCount } = usePaginatedCharacters();
 
   if (isLoading) {
     return (
@@ -24,10 +25,15 @@ export default function MainContent() {
     <MainContentContainer>
       <MaxWidthFlexContainer>
         <HalfWidthContainer>
-          <DisneyCharacterTable />
+          <CharacterModalProvider>
+            <DisneyCharacterTable
+              characters={characters}
+              totalCount={totalCount}
+            />
+          </CharacterModalProvider>
         </HalfWidthContainer>
         <HalfWidthContainer>
-          <CharacterFilmsPieChart />
+          <CharacterFilmsPieChart characters={characters} />
         </HalfWidthContainer>
       </MaxWidthFlexContainer>
     </MainContentContainer>

@@ -4,14 +4,25 @@ import {
   TablePaginationActions
 } from '@mui/material';
 import { ColumnVisibilityMenu } from './ColumnVisibilityMenu';
-import { usePaginatedCharacters, usePagination } from '@/hooks';
-import type { TTableProps } from '@/types';
+import { useCharactersLoading, usePagination } from '@/hooks';
+import type { TDisneyCharacter } from '@/types';
 import { TableFooterContainer } from './TableFooter.styles';
+import type { Table } from '@tanstack/react-table';
 
-export function TableFooter({ table }: TTableProps) {
+interface ITableFooterProps {
+  table: Table<TDisneyCharacter>;
+  totalCount: number;
+  emptyResults: boolean;
+}
+
+export function TableFooter({
+  table,
+  totalCount,
+  emptyResults
+}: ITableFooterProps) {
   const { setPagination } = usePagination();
   const { pageSize, pageIndex } = table.getState().pagination;
-  const { totalCount, isFetching, emptyResults } = usePaginatedCharacters();
+  const isFetching = useCharactersLoading();
   return (
     <TableFooterContainer>
       <ColumnVisibilityMenu table={table} />

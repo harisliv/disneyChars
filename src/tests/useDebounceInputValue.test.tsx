@@ -2,34 +2,16 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
 import { useDebounceInputValue } from '../hooks/useDebounceInputValue';
 
-const cancelSpy = vi.fn();
-
-vi.mock('lodash.debounce', async (importOriginal) => {
-  const originalModule = await importOriginal<{
-    default: typeof import('lodash.debounce');
-  }>();
-  return {
-    default: (fn: (...args: any[]) => void, delay: number) => {
-      const debouncedFn = originalModule.default(fn, delay);
-      const originalCancel = debouncedFn.cancel;
-
-      debouncedFn.cancel = () => {
-        cancelSpy();
-        originalCancel();
-      };
-
-      return debouncedFn;
-    }
-  };
-});
-
 describe('useDebounceInputValue', () => {
+  let clearTimeoutSpy: ReturnType<typeof vi.spyOn>;
+
   beforeEach(() => {
     vi.useFakeTimers();
-    cancelSpy.mockClear();
+    clearTimeoutSpy = vi.spyOn(window, 'clearTimeout');
   });
 
   afterEach(() => {
+    clearTimeoutSpy.mockRestore();
     vi.useRealTimers();
   });
 
@@ -116,6 +98,35 @@ describe('useDebounceInputValue', () => {
     expect(result.current).toBe('change3');
   });
 
+  it('should reschedule the pending value when delay changes', () => {
+    const { result, rerender } = renderHook(
+      ({ value, delay }) => useDebounceInputValue(value, delay),
+      {
+        initialProps: { value: 'initial', delay: 500 }
+      }
+    );
+
+    rerender({ value: 'updated', delay: 500 });
+
+    act(() => {
+      vi.advanceTimersByTime(250);
+    });
+
+    rerender({ value: 'updated', delay: 1000 });
+
+    act(() => {
+      vi.advanceTimersByTime(999);
+    });
+
+    expect(result.current).toBe('initial');
+
+    act(() => {
+      vi.advanceTimersByTime(1);
+    });
+
+    expect(result.current).toBe('updated');
+  });
+
   it('should cancel pending updates on unmount', () => {
     const { result, rerender, unmount } = renderHook(
       ({ value }) => useDebounceInputValue(value, 500),
@@ -129,7 +140,7 @@ describe('useDebounceInputValue', () => {
 
     unmount();
 
-    expect(cancelSpy).toHaveBeenCalled();
+    expect(clearTimeoutSpy).toHaveBeenCalled();
   });
 
   it('should handle multiple value changes correctly', () => {

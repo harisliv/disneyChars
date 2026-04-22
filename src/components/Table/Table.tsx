@@ -11,49 +11,34 @@ import { CardContainer, CardHeader } from '@/components/Card';
 import { TableFooter } from './TableFooter';
 import TableHeader from './TableHeader';
 import TableBodyComponent from './TableBody';
-import { CharacterDetailsModal } from '@/components/CharacterDetailsModal';
 import { CharacterSearch } from '@/components/CharacterSearch';
 import { usePagination } from '@/hooks';
-import { usePaginatedCharacters } from '@/hooks';
-import type { TDisneyCharacter } from '@/types';
 import { EmptyResults } from '../EmptyResults';
+import type { TDisneyCharacter } from '@/types';
+
+interface IDisneyCharacterTableProps {
+  characters: TDisneyCharacter[];
+  totalCount: number;
+}
 
 const initialColumnVisibility: VisibilityState = {
   allies: false,
   enemies: false
 };
 
-export default function DisneyCharacterTable() {
-  const [selectedCharacterId, setSelectedCharacterId] = useState<number | null>(
-    null
-  );
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const handleViewDetails = (characterId: number) => {
-    setSelectedCharacterId(characterId);
-    setIsModalOpen(true);
-  };
-
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-  };
-
-  const handleCharacterSelect = (character: TDisneyCharacter | null) => {
-    if (character) {
-      handleViewDetails(character._id);
-    }
-  };
-
-  const columns = useTableColumns({ onViewDetails: handleViewDetails });
+export default function DisneyCharacterTable({
+  characters,
+  totalCount
+}: IDisneyCharacterTableProps) {
+  const columns = useTableColumns();
   const { pagination, setPagination } = usePagination();
-  const { data: queryData, totalCount } = usePaginatedCharacters();
 
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>(
     initialColumnVisibility
   );
 
   const table = useReactTable({
-    data: queryData || [],
+    data: characters,
     columns,
     rowCount: totalCount,
     getCoreRowModel: getCoreRowModel(),
@@ -67,33 +52,28 @@ export default function DisneyCharacterTable() {
     },
     debugTable: false
   });
+  const visibleColumnCount = table.getVisibleLeafColumns().length;
 
   return (
-    <>
-      <CardContainer>
-        <CardHeader
-          title="Disney Characters"
-          actions={
-            <CharacterSearch onCharacterSelect={handleCharacterSelect} />
-          }
-        />
-        <StyledTableContainer>
-          <StyledTable stickyHeader>
-            <TableHeader table={table} />
-            {queryData && queryData.length > 0 ? (
-              <TableBodyComponent table={table} />
-            ) : (
-              <EmptyResults table={table} />
-            )}
-          </StyledTable>
-        </StyledTableContainer>
-        <TableFooter table={table} />
-      </CardContainer>
-      <CharacterDetailsModal
-        open={isModalOpen}
-        onClose={handleCloseModal}
-        characterId={selectedCharacterId?.toString() || null}
+    <CardContainer>
+      <CardHeader title="Disney Characters">
+        <CharacterSearch />
+      </CardHeader>
+      <StyledTableContainer>
+        <StyledTable stickyHeader>
+          <TableHeader table={table} />
+          {characters.length > 0 ? (
+            <TableBodyComponent table={table} />
+          ) : (
+            <EmptyResults colSpan={visibleColumnCount} />
+          )}
+        </StyledTable>
+      </StyledTableContainer>
+      <TableFooter
+        table={table}
+        totalCount={totalCount}
+        emptyResults={characters.length === 0}
       />
-    </>
+    </CardContainer>
   );
 }

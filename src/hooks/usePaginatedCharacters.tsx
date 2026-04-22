@@ -1,7 +1,7 @@
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import { usePagination } from './usePagination';
 import useGetQueryParamRoutes from './useGetQueryParamRoutes';
-import { convertToPieChartData, convertToTableEntity } from '@/utils';
+import { convertToTableEntity } from '@/utils';
 import { useMemo } from 'react';
 
 export function usePaginatedCharacters() {
@@ -20,25 +20,19 @@ export function usePaginatedCharacters() {
     queryFn: ({ signal }) => fetcher(queryParams, signal)
   });
 
+  const totalCount = query.data?.info?.totalPages
+    ? query.data.info.totalPages * pagination.pageSize
+    : 0;
+
   const characters = useMemo(
     () => convertToTableEntity(query.data?.data ?? []),
     [query.data]
   );
 
-  const pieChartData = useMemo(
-    () => convertToPieChartData(characters),
-    [characters]
-  );
-
-  const totalCount = query.data?.info?.totalPages
-    ? query.data.info.totalPages * pagination.pageSize
-    : 0;
-
   return {
     ...query,
     data: characters,
     totalCount,
-    pieChartData,
     emptyResults: characters.length === 0
   };
 }
