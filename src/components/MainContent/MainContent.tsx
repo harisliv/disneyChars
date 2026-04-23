@@ -22,20 +22,20 @@ export default function MainContent() {
   }
 
   return (
-    <MainContentContainer>
-      <MaxWidthFlexContainer>
-        <HalfWidthContainer>
-          <CharacterModalProvider>
+    <CharacterModalProvider>
+      <MainContentContainer>
+        <MaxWidthFlexContainer>
+          <HalfWidthContainer>
             <DisneyCharacterTable
               characters={characters}
               totalCount={totalCount}
             />
-          </CharacterModalProvider>
-        </HalfWidthContainer>
-        <HalfWidthContainer>
-          <CharacterFilmsPieChart characters={characters} />
-        </HalfWidthContainer>
-      </MaxWidthFlexContainer>
-    </MainContentContainer>
+          </HalfWidthContainer>
+          <HalfWidthContainer>
+            <CharacterFilmsPieChart characters={characters} />
+          </HalfWidthContainer>
+        </MaxWidthFlexContainer>
+      </MainContentContainer>
+    </CharacterModalProvider>
   );
 }
