@@ -1,4 +1,4 @@
-import { useCharactersLoading, usePaginatedCharacters } from '@/hooks';
+import { usePaginatedCharacters } from '@/hooks';
 import { CircularProgress } from '@mui/material';
 import { DisneyCharacterTable } from '../Table';
 import { CharacterFilmsPieChart } from '../CharacterFilmsPieChart';
