@@ -1,16 +1,17 @@
 import { TableBody, TableCell, TableRow } from '@mui/material';
 import Typography from '@mui/material/Typography';
 import InboxIcon from '@mui/icons-material/Inbox';
-import type { TTableProps } from '@/types';
 import { CenteredColumnContainerTextCenter } from '../shared';
 
-export function EmptyResults({ table }: TTableProps) {
-  const visibleColumnsCount = table.getVisibleLeafColumns().length;
+type TEmptyResultsProps = {
+  colSpan: number;
+};
 
+export function EmptyResults({ colSpan }: TEmptyResultsProps) {
   return (
     <TableBody>
       <TableRow>
-        <TableCell colSpan={visibleColumnsCount} sx={{ border: 'none', py: 8 }}>
+        <TableCell colSpan={colSpan} sx={{ border: 'none', py: 8 }}>
           <CenteredColumnContainerTextCenter>
             <InboxIcon
               sx={{

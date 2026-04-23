@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { CharacterSearch } from '../components/CharacterSearch/CharacterSearch';
@@ -7,10 +7,8 @@ import { TestQueryClientProvider } from './TestQueryClientProvider';
 import { mockCharactersResponse, defaultMockCharacters } from './testUtils';
 
 describe('CharacterSearch', () => {
-  const mockOnCharacterSelect = vi.fn();
-
   it('should render the component with default search type', () => {
-    render(<CharacterSearch onCharacterSelect={mockOnCharacterSelect} />, {
+    render(<CharacterSearch />, {
       wrapper: TestQueryClientProvider
     });
 
@@ -23,7 +21,7 @@ describe('CharacterSearch', () => {
 
   it('should change placeholder when search type changes to TV show', async () => {
     const user = userEvent.setup();
-    render(<CharacterSearch onCharacterSelect={mockOnCharacterSelect} />, {
+    render(<CharacterSearch />, {
       wrapper: TestQueryClientProvider
     });
 
@@ -39,7 +37,7 @@ describe('CharacterSearch', () => {
 
   it('should display "Start typing to search..." when input is empty', async () => {
     const user = userEvent.setup();
-    render(<CharacterSearch onCharacterSelect={mockOnCharacterSelect} />, {
+    render(<CharacterSearch />, {
       wrapper: TestQueryClientProvider
     });
 
@@ -53,7 +51,7 @@ describe('CharacterSearch', () => {
 
   it('should display "No characters found" when input has value but no results', async () => {
     const user = userEvent.setup();
-    render(<CharacterSearch onCharacterSelect={mockOnCharacterSelect} />, {
+    render(<CharacterSearch />, {
       wrapper: TestQueryClientProvider
     });
 
@@ -75,7 +73,7 @@ describe('CharacterSearch', () => {
     });
 
     const user = userEvent.setup();
-    render(<CharacterSearch onCharacterSelect={mockOnCharacterSelect} />, {
+    render(<CharacterSearch />, {
       wrapper: TestQueryClientProvider
     });
 
@@ -93,7 +91,7 @@ describe('CharacterSearch', () => {
     });
 
     const user = userEvent.setup();
-    render(<CharacterSearch onCharacterSelect={mockOnCharacterSelect} />, {
+    render(<CharacterSearch />, {
       wrapper: TestQueryClientProvider
     });
 
@@ -109,13 +107,13 @@ describe('CharacterSearch', () => {
     );
   });
 
-  it('should call onCharacterSelect when a character is selected', async () => {
+  it('should open character details when a character is selected', async () => {
     mockCharactersResponse({
       totalPages: 1
     });
 
     const user = userEvent.setup();
-    render(<CharacterSearch onCharacterSelect={mockOnCharacterSelect} />, {
+    render(<CharacterSearch />, {
       wrapper: TestQueryClientProvider
     });
 
@@ -132,18 +130,18 @@ describe('CharacterSearch', () => {
     const option = screen.getByText('Mickey Mouse');
     await user.click(option);
 
-    expect(mockOnCharacterSelect).toHaveBeenCalledWith(
-      defaultMockCharacters[0]
-    );
+    await waitFor(() => {
+      expect(screen.getByText('Character Details')).toBeInTheDocument();
+    });
   });
 
-  it('should call onCharacterSelect with null when input is cleared', async () => {
+  it('should clear the selected search value', async () => {
     mockCharactersResponse({
       totalPages: 1
     });
 
     const user = userEvent.setup();
-    render(<CharacterSearch onCharacterSelect={mockOnCharacterSelect} />, {
+    render(<CharacterSearch />, {
       wrapper: TestQueryClientProvider
     });
 
@@ -157,22 +155,14 @@ describe('CharacterSearch', () => {
       { timeout: 2000 }
     );
 
-    const option = screen.getByText('Mickey Mouse');
-    await user.click(option);
+    await user.clear(input);
 
-    expect(mockOnCharacterSelect).toHaveBeenCalledWith(
-      defaultMockCharacters[0]
-    );
-
-    const clearButton = screen.getByLabelText('Clear');
-    await user.click(clearButton);
-
-    expect(mockOnCharacterSelect).toHaveBeenCalledWith(null);
+    expect(input).toHaveValue('');
   });
 
   it('should toggle search type between name and tvShows', async () => {
     const user = userEvent.setup();
-    render(<CharacterSearch onCharacterSelect={mockOnCharacterSelect} />, {
+    render(<CharacterSearch />, {
       wrapper: TestQueryClientProvider
     });
 
@@ -208,7 +198,7 @@ describe('CharacterSearch', () => {
     });
 
     const user = userEvent.setup();
-    render(<CharacterSearch onCharacterSelect={mockOnCharacterSelect} />, {
+    render(<CharacterSearch />, {
       wrapper: TestQueryClientProvider
     });
 
@@ -224,7 +214,7 @@ describe('CharacterSearch', () => {
   });
 
   it('should not show "More" button when no characters are available', () => {
-    render(<CharacterSearch onCharacterSelect={mockOnCharacterSelect} />, {
+    render(<CharacterSearch />, {
       wrapper: TestQueryClientProvider
     });
 
@@ -265,7 +255,7 @@ describe('CharacterSearch', () => {
     });
 
     const user = userEvent.setup();
-    render(<CharacterSearch onCharacterSelect={mockOnCharacterSelect} />, {
+    render(<CharacterSearch />, {
       wrapper: TestQueryClientProvider
     });
 
@@ -296,7 +286,7 @@ describe('CharacterSearch', () => {
     });
 
     const user = userEvent.setup();
-    render(<CharacterSearch onCharacterSelect={mockOnCharacterSelect} />, {
+    render(<CharacterSearch />, {
       wrapper: TestQueryClientProvider
     });
 
@@ -331,7 +321,7 @@ describe('CharacterSearch', () => {
     });
 
     const user = userEvent.setup();
-    render(<CharacterSearch onCharacterSelect={mockOnCharacterSelect} />, {
+    render(<CharacterSearch />, {
       wrapper: TestQueryClientProvider
     });
 

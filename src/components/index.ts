@@ -1,5 +1,5 @@
 export { CardContainer, CardHeader } from './Card';
-export { CharacterDetailsModal } from './CharacterDetailsModal';
+export { CharacterModal } from './CharacterModal';
 export { CharacterFilmsPieChart } from './CharacterFilmsPieChart';
 export { EmptyResults } from './EmptyResults/EmptyResults';
 export { ErrorBoundary } from './ErrorBoundary/ErrorBoundary';

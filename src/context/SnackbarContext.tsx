@@ -1,5 +1,7 @@
 import {
   createContext,
+  useCallback,
+  useMemo,
   useState,
   type Dispatch,
   type ReactNode,
@@ -19,8 +21,8 @@ export type SnackbarState = {
 };
 
 interface SnackbarContextType {
-  snackbar: SnackbarState;
   setSnackbar: Dispatch<SetStateAction<SnackbarState>>;
+  closeSnackbar: () => void;
 }
 
 export const SnackbarContext = createContext<SnackbarContextType | undefined>(
@@ -38,10 +40,19 @@ export function SnackbarProvider({ children }: SnackbarProviderProps) {
     open: false
   });
 
+  const closeSnackbar = useCallback(() => {
+    setSnackbar((prev) => ({ ...prev, open: false }));
+  }, []);
+
+  const contextValue = useMemo(
+    () => ({ setSnackbar, closeSnackbar }),
+    [closeSnackbar]
+  );
+
   return (
-    <SnackbarContext.Provider value={{ snackbar, setSnackbar }}>
+    <SnackbarContext.Provider value={contextValue}>
       {children}
-      <Snackbar />
+      <Snackbar snackbar={snackbar} onClose={closeSnackbar} />
     </SnackbarContext.Provider>
   );
 }

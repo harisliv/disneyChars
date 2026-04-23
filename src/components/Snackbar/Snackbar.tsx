@@ -1,22 +1,21 @@
 import { Alert, Snackbar as MuiSnackbar } from '@mui/material';
-import { useSnackbar } from '@/hooks';
+import type { SnackbarState } from '@/context';
 
-export function Snackbar() {
-  const { snackbar, setSnackbar } = useSnackbar();
+interface ISnackbarProps {
+  snackbar: SnackbarState;
+  onClose: () => void;
+}
 
-  const handleClose = () => {
-    setSnackbar((prev) => ({ ...prev, open: false }));
-  };
-
+export function Snackbar({ snackbar, onClose }: ISnackbarProps) {
   return (
     <MuiSnackbar
       open={snackbar.open}
       autoHideDuration={6000}
-      onClose={handleClose}
+      onClose={onClose}
       anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
     >
       <Alert
-        onClose={handleClose}
+        onClose={onClose}
         severity={snackbar.status}
         sx={{ width: '100%' }}
       >

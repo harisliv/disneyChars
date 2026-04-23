@@ -1,39 +1,39 @@
-import {
-  createContext,
-  useState,
-  type Dispatch,
-  type ReactNode,
-  type SetStateAction
-} from 'react';
+import { useMemo, useState, type ReactNode } from 'react';
 import type { PaginationState } from '@tanstack/react-table';
-// TODO why is this safe
-interface PaginationContextType {
-  pagination: PaginationState;
-  setPagination: Dispatch<SetStateAction<PaginationState>>;
-}
+import { createContext, type Dispatch, type SetStateAction } from 'react';
 
-export const PaginationContext = createContext<
-  PaginationContextType | undefined
->(undefined);
-
-interface PaginationProviderProps {
+interface IPaginationProviderProps {
   children: ReactNode;
   initialPageIndex?: number;
   initialPageSize?: number;
 }
 
+interface IPaginationContextType {
+  pagination: PaginationState;
+  setPagination: Dispatch<SetStateAction<PaginationState>>;
+}
+
+export const PaginationContext = createContext<
+  IPaginationContextType | undefined
+>(undefined);
+
 export function PaginationProvider({
   children,
   initialPageIndex = 0,
   initialPageSize = 50
-}: PaginationProviderProps) {
+}: IPaginationProviderProps) {
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: initialPageIndex,
     pageSize: initialPageSize
   });
 
+  const contextValue = useMemo(
+    () => ({ pagination, setPagination }),
+    [pagination]
+  );
+
   return (
-    <PaginationContext.Provider value={{ pagination, setPagination }}>
+    <PaginationContext.Provider value={contextValue}>
       {children}
     </PaginationContext.Provider>
   );

@@ -1,3 +1,6 @@
+export { useCharacterModal } from './useCharacterModal';
+export { useCharactersLoading } from './useCharactersLoading';
+export { useCharactersPieData } from './useCharactersPieData';
 export { useDebounceInputValue } from './useDebounceInputValue';
 export { useExportPie } from './useExportPie';
 export { usePaginatedCharacters } from './usePaginatedCharacters';

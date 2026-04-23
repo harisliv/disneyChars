@@ -4,10 +4,10 @@ import type { ReactNode } from 'react';
 
 interface ICardHeaderProps {
   title: string;
-  actions?: ReactNode;
+  children?: ReactNode;
 }
 
-export function CardHeader({ title, actions }: ICardHeaderProps) {
+export function CardHeader({ title, children }: ICardHeaderProps) {
   return (
     <Toolbar
       sx={{
@@ -22,7 +22,7 @@ export function CardHeader({ title, actions }: ICardHeaderProps) {
       <Typography variant="h6" component="div" sx={{ color: 'text.primary' }}>
         {title}
       </Typography>
-      {actions}
+      {children}
     </Toolbar>
   );
 }

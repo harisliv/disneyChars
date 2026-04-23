@@ -3,13 +3,12 @@ import type { TDisneyCharacter } from '@/types';
 import React from 'react';
 import { IconButton } from '@mui/material';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
+import { useCharacterModal } from '@/hooks';
 
-interface IUseTableColumnsProps {
-  onViewDetails?: (characterId: number) => void;
-}
+const columnHelper = createColumnHelper<TDisneyCharacter>();
 
-export function useTableColumns({ onViewDetails }: IUseTableColumnsProps = {}) {
-  const columnHelper = createColumnHelper<TDisneyCharacter>();
+export function useTableColumns() {
+  const { openCharacterDetails } = useCharacterModal();
 
   return React.useMemo(
     () => [
@@ -45,7 +44,7 @@ export function useTableColumns({ onViewDetails }: IUseTableColumnsProps = {}) {
           <IconButton
             color="primary"
             size="small"
-            onClick={() => onViewDetails?.(info.row.original._id)}
+            onClick={() => openCharacterDetails(info.row.original._id)}
             data-testid={`view-details-button-${info.row.original._id}`}
           >
             <InfoOutlinedIcon fontSize="small" />
@@ -53,6 +52,6 @@ export function useTableColumns({ onViewDetails }: IUseTableColumnsProps = {}) {
         )
       })
     ],
-    [columnHelper, onViewDetails]
+    [openCharacterDetails]
   );
 }
