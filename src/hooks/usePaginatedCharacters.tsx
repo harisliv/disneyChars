@@ -32,7 +32,6 @@ export function usePaginatedCharacters() {
   return {
     ...query,
     data: characters,
-    totalCount,
-    emptyResults: characters.length === 0
+    totalCount
   };
 }

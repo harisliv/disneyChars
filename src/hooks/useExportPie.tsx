@@ -1,4 +1,3 @@
-import * as XLSX from 'xlsx';
 import { handleError } from '../utils/error';
 import { useSnackbar } from './useSnackbar';
 import { useCallback } from 'react';
@@ -8,8 +7,9 @@ export function useExportPie(
 ) {
   const { setSnackbar } = useSnackbar();
 
-  const exportToExcel = useCallback(() => {
+  const exportToExcel = useCallback(async () => {
     try {
+      const XLSX = await import('xlsx');
       const excelData = pieChartData.map((item) => ({
         'Character Name': item.name,
         'Number of Films': item.y,
