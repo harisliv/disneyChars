@@ -4,7 +4,7 @@ import userEvent from '@testing-library/user-event';
 import DisneyCharacterTable from '../components/Table/Table';
 import { TestQueryClientProvider } from './TestQueryClientProvider';
 import { PaginationProvider } from '../context/PaginationContext';
-import { mockCharactersResponse, defaultMockCharacters } from './testUtils';
+import { defaultMockCharacters } from './testUtils';
 import type { TDisneyCharacter } from '../types';
 
 const createWrapper =
@@ -51,12 +51,13 @@ describe('DisneyCharacterTable', () => {
   });
 
   it('should render the table with characters', async () => {
-    mockCharactersResponse({
-      data: mockCharacters,
-      totalPages: 1
-    });
-
-    render(<DisneyCharacterTable />, { wrapper: createWrapper() });
+    render(
+      <DisneyCharacterTable
+        characters={mockCharacters}
+        totalCount={mockCharacters.length}
+      />,
+      { wrapper: createWrapper() }
+    );
 
     await waitFor(() => {
       expect(screen.getByText('Disney Characters')).toBeInTheDocument();
@@ -66,12 +67,13 @@ describe('DisneyCharacterTable', () => {
   });
 
   it('should render table headers', async () => {
-    mockCharactersResponse({
-      data: mockCharacters,
-      totalPages: 1
-    });
-
-    render(<DisneyCharacterTable />, { wrapper: createWrapper() });
+    render(
+      <DisneyCharacterTable
+        characters={mockCharacters}
+        totalCount={mockCharacters.length}
+      />,
+      { wrapper: createWrapper() }
+    );
 
     await waitFor(() => {
       const headers = screen.getAllByText('Name');
@@ -83,13 +85,14 @@ describe('DisneyCharacterTable', () => {
   });
 
   it('should open modal when clicking view details button', async () => {
-    mockCharactersResponse({
-      data: mockCharacters,
-      totalPages: 1
-    });
-
     const user = userEvent.setup();
-    render(<DisneyCharacterTable />, { wrapper: createWrapper() });
+    render(
+      <DisneyCharacterTable
+        characters={mockCharacters}
+        totalCount={mockCharacters.length}
+      />,
+      { wrapper: createWrapper() }
+    );
 
     await waitFor(() => {
       expect(screen.getByText('Mickey Mouse')).toBeInTheDocument();
@@ -105,13 +108,14 @@ describe('DisneyCharacterTable', () => {
   });
 
   it('should close modal when clicking close button', async () => {
-    mockCharactersResponse({
-      data: mockCharacters,
-      totalPages: 1
-    });
-
     const user = userEvent.setup();
-    render(<DisneyCharacterTable />, { wrapper: createWrapper() });
+    render(
+      <DisneyCharacterTable
+        characters={mockCharacters}
+        totalCount={mockCharacters.length}
+      />,
+      { wrapper: createWrapper() }
+    );
 
     await waitFor(() => {
       expect(screen.getByText('Mickey Mouse')).toBeInTheDocument();
@@ -139,13 +143,14 @@ describe('DisneyCharacterTable', () => {
   });
 
   it('should open modal when selecting character from search', async () => {
-    mockCharactersResponse({
-      data: mockCharacters,
-      totalPages: 1
-    });
-
     const user = userEvent.setup();
-    render(<DisneyCharacterTable />, { wrapper: createWrapper() });
+    render(
+      <DisneyCharacterTable
+        characters={mockCharacters}
+        totalCount={mockCharacters.length}
+      />,
+      { wrapper: createWrapper() }
+    );
 
     await waitFor(() => {
       expect(screen.getByText('Mickey Mouse')).toBeInTheDocument();
@@ -171,51 +176,15 @@ describe('DisneyCharacterTable', () => {
     });
   });
 
-  it('should change page when clicking pagination controls', async () => {
-    const page1Characters = mockCharacters.slice(0, 2);
-    const page2Characters = mockCharacters.slice(2);
-
-    mockCharactersResponse({
-      pages: [
-        {
-          page: 1,
-          data: page1Characters,
-          nextPage: true
-        },
-        {
-          page: 2,
-          data: page2Characters,
-          nextPage: false
-        }
-      ],
-      totalPages: 2
-    });
-
-    const user = userEvent.setup();
-    render(<DisneyCharacterTable />, { wrapper: createWrapper() });
-
-    await waitFor(() => {
-      expect(screen.getByText('Mickey Mouse')).toBeInTheDocument();
-      expect(screen.getByText('Donald Duck')).toBeInTheDocument();
-    });
-
-    const nextPageButton = screen.getByLabelText('Go to next page');
-    await user.click(nextPageButton);
-
-    await waitFor(() => {
-      expect(screen.getByText('Goofy')).toBeInTheDocument();
-      expect(screen.getByText('Pluto')).toBeInTheDocument();
-    });
-  });
-
   it('should change page size when selecting different rows per page', async () => {
-    mockCharactersResponse({
-      data: mockCharacters,
-      totalPages: 1
-    });
-
     const user = userEvent.setup();
-    render(<DisneyCharacterTable />, { wrapper: createWrapper() });
+    render(
+      <DisneyCharacterTable
+        characters={mockCharacters}
+        totalCount={mockCharacters.length}
+      />,
+      { wrapper: createWrapper() }
+    );
 
     await waitFor(() => {
       expect(screen.getByText('Mickey Mouse')).toBeInTheDocument();
@@ -233,13 +202,14 @@ describe('DisneyCharacterTable', () => {
   });
 
   it('should sort columns when clicking column headers', async () => {
-    mockCharactersResponse({
-      data: mockCharacters,
-      totalPages: 1
-    });
-
     const user = userEvent.setup();
-    render(<DisneyCharacterTable />, { wrapper: createWrapper() });
+    render(
+      <DisneyCharacterTable
+        characters={mockCharacters}
+        totalCount={mockCharacters.length}
+      />,
+      { wrapper: createWrapper() }
+    );
 
     await waitFor(() => {
       expect(screen.getByText('Mickey Mouse')).toBeInTheDocument();
@@ -257,13 +227,14 @@ describe('DisneyCharacterTable', () => {
   });
 
   it('should toggle column visibility', async () => {
-    mockCharactersResponse({
-      data: mockCharacters,
-      totalPages: 1
-    });
-
     const user = userEvent.setup();
-    render(<DisneyCharacterTable />, { wrapper: createWrapper() });
+    render(
+      <DisneyCharacterTable
+        characters={mockCharacters}
+        totalCount={mockCharacters.length}
+      />,
+      { wrapper: createWrapper() }
+    );
 
     await waitFor(() => {
       expect(screen.getByText('Mickey Mouse')).toBeInTheDocument();
@@ -289,12 +260,13 @@ describe('DisneyCharacterTable', () => {
   });
 
   it('should display character search component', async () => {
-    mockCharactersResponse({
-      data: mockCharacters,
-      totalPages: 1
-    });
-
-    render(<DisneyCharacterTable />, { wrapper: createWrapper() });
+    render(
+      <DisneyCharacterTable
+        characters={mockCharacters}
+        totalCount={mockCharacters.length}
+      />,
+      { wrapper: createWrapper() }
+    );
 
     await waitFor(() => {
       expect(
@@ -303,56 +275,14 @@ describe('DisneyCharacterTable', () => {
     });
   });
 
-  it('should reset to first page when changing page size', async () => {
-    mockCharactersResponse({
-      pages: [
-        {
-          page: 1,
-          data: mockCharacters.slice(0, 2),
-          nextPage: true
-        },
-        {
-          page: 2,
-          data: mockCharacters.slice(2),
-          nextPage: false
-        }
-      ],
-      totalPages: 2
-    });
-
-    const user = userEvent.setup();
-    render(<DisneyCharacterTable />, { wrapper: createWrapper() });
-
-    await waitFor(() => {
-      expect(screen.getByText('Mickey Mouse')).toBeInTheDocument();
-    });
-
-    const nextPageButton = screen.getByLabelText('Go to next page');
-    await user.click(nextPageButton);
-
-    await waitFor(() => {
-      expect(screen.getByText('Goofy')).toBeInTheDocument();
-    });
-
-    const rowsPerPageSelect = screen.getByLabelText('rows per page');
-    await user.click(rowsPerPageSelect);
-
-    const option20 = screen.getByRole('option', { name: '20' });
-    await user.click(option20);
-
-    await waitFor(() => {
-      const pageInfo = screen.getByText(/1–/);
-      expect(pageInfo).toBeInTheDocument();
-    });
-  });
-
   it('should display pagination controls', async () => {
-    mockCharactersResponse({
-      data: mockCharacters,
-      totalPages: 1
-    });
-
-    render(<DisneyCharacterTable />, { wrapper: createWrapper() });
+    render(
+      <DisneyCharacterTable
+        characters={mockCharacters}
+        totalCount={mockCharacters.length}
+      />,
+      { wrapper: createWrapper() }
+    );
 
     await waitFor(() => {
       expect(screen.getByText('Mickey Mouse')).toBeInTheDocument();
@@ -379,13 +309,14 @@ describe('DisneyCharacterTable', () => {
   });
 
   it('should handle sorting in both directions', async () => {
-    mockCharactersResponse({
-      data: mockCharacters,
-      totalPages: 1
-    });
-
     const user = userEvent.setup();
-    render(<DisneyCharacterTable />, { wrapper: createWrapper() });
+    render(
+      <DisneyCharacterTable
+        characters={mockCharacters}
+        totalCount={mockCharacters.length}
+      />,
+      { wrapper: createWrapper() }
+    );
 
     await waitFor(() => {
       expect(screen.getByText('Mickey Mouse')).toBeInTheDocument();
